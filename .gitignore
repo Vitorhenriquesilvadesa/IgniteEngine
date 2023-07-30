@@ -1,4 +1,5 @@
 bin/
 .vscode/
 vendor/
-src/org/test/
+src/org/test/*.java
+.gitignore
