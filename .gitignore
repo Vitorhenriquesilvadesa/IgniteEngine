@@ -2,4 +2,3 @@ bin/
 .vscode/
 vendor/
 src/test/
-.gitignore
