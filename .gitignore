@@ -1,4 +1,4 @@
 bin/
 .vscode/
 vendor/
-src/test/*
+src/org/test/

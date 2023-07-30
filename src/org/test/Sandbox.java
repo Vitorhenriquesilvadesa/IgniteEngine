@@ -9,12 +9,13 @@ public class Sandbox extends Application {
 
     public void start() {
         Macros.DEBUG = false;
+
+        disableEventExceptions();
         addTickEvent(this::testMethod, "test");
     }
 
     public void update() {
         callTickEvent("test", WindowsInput.isKeyPressed(KeyCode.TAB));
-        init();
     }
 
     public void testMethod() {

@@ -79,6 +79,8 @@ public abstract class Application {
     /** List to store the names of tick events in the order they were added. */
     private List<String> tickEventNames = new ArrayList<String>();
 
+    private static boolean isInit = false;
+
     /**
      * a parameter that defines whether exceptions for adding, removing or executing
      * events will be thrown or not according to the value.
@@ -103,6 +105,14 @@ public abstract class Application {
      * in the logger.
      */
     public static void init() {
+
+        if (!isInit) {
+            isInit = true;
+
+        } else {
+            throw new IllegalCallerException("The application must be call init only one time.");
+        }
+
         ClientLog.trace("Application initialized.");
 
         WindowsInput.init();
@@ -377,7 +387,7 @@ public abstract class Application {
      * @param caller    The caller that will handle the tick event.
      * @param eventName The name of the tick event.
      * @throws DuplicatedTickEventException if a tick event with the same name
-     *                                         already exists.
+     *                                      already exists.
      */
 
     public void addTickEvent(GenericFunction caller, String eventName) throws DuplicatedTickEventException {
@@ -403,7 +413,7 @@ public abstract class Application {
      * @param eventName       The name of the tick event.
      * @param eventAttributes Additional attributes associated with the tick event.
      * @throws DuplicatedTickEventException if a tick event with the same name
-     *                                         already exists.
+     *                                      already exists.
      */
 
     public void addTickEvent(GenericFunction caller, String eventName, Object... eventAttributes)
@@ -429,7 +439,7 @@ public abstract class Application {
      * @param tickEventName The name of the tick event to retrieve.
      * @return The tick event associated with the given name.
      * @throws InexistentTickEventException if the tick event with the given name
-     *                                         does not exist.
+     *                                      does not exist.
      */
 
     private TickEvent getTickEvent(String tickEventName) throws InexistentTickEventException {
@@ -453,8 +463,8 @@ public abstract class Application {
      *
      * @param tickEventName The name of the tick event to remove.
      * @throws InexistentTickEventException if the tick event with the given name
-     *                                         does not exist or has already been
-     *                                         removed.
+     *                                      does not exist or has already been
+     *                                      removed.
      */
 
     public void removeTickEvent(String tickEventName) throws InexistentTickEventException {
@@ -502,5 +512,13 @@ public abstract class Application {
 
         Tick tick = event.getTick();
         tick.call(condition, event.getMethod());
+    }
+
+    public void disableEventExceptions() {
+        throwEventExceptions = false;
+    }
+
+    public void enableEventExceptions() {
+        throwEventExceptions = true;
     }
 }
