@@ -62,4 +62,19 @@ public class ExampleLayer extends Layer {
         ClientLog.debug(e);
     }
 
+    @Override
+    public void onImGuiRender() {
+
+    }
+
+    @Override
+    public void begin() {
+
+    }
+
+    @Override
+    public void end() {
+
+    }
+
 }

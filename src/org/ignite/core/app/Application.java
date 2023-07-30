@@ -23,6 +23,7 @@ import org.ignite.events.EventType;
 import org.ignite.events.WindowCloseEvent;
 import org.ignite.layers.Layer;
 import org.ignite.layers.LayerStack;
+import org.ignite.layers.imgui.ImGuiLayer;
 import org.ignite.platform.general.Window;
 import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
@@ -81,6 +82,8 @@ public abstract class Application {
 
     private static boolean isInit = false;
 
+    protected ImGuiLayer imGuiLayer;
+
     /**
      * a parameter that defines whether exceptions for adding, removing or executing
      * events will be thrown or not according to the value.
@@ -95,6 +98,7 @@ public abstract class Application {
     public Application() {
         this.window = WindowsWindow.create(new WindowProps());
         this.window.setEventCallback(this::onEvent);
+        this.imGuiLayer = new ImGuiLayer();
     }
 
     /**
@@ -166,6 +170,16 @@ public abstract class Application {
             for (Layer layer : this.layerStack) {
                 layer.onUpdate();
             }
+
+            // this.imGuiLayer.begin();
+
+            for (Layer layer : this.layerStack) {
+                layer.begin();
+                layer.onImGuiRender();
+                layer.end();
+            }
+
+            // this.imGuiLayer.end();
 
             this.window.onUpdate();
         }

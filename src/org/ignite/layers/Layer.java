@@ -82,6 +82,12 @@ public abstract class Layer {
      */
     public abstract void onEvent(Event e);
 
+    public abstract void onImGuiRender();
+
+    public abstract void begin();
+
+    public abstract void end();
+
     /**
      * Gets the debug name of the layer.
      *

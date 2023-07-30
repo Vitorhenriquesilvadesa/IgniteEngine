@@ -33,9 +33,10 @@ import org.ignite.layers.Layer;
 
 import imgui.ImGui;
 import imgui.ImGuiIO;
-import imgui.flag.ImGuiBackendFlags;
-import imgui.flag.ImGuiKey;
+import imgui.ImGuiStyle;
+import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
+import imgui.glfw.ImGuiImplGlfw;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -48,13 +49,12 @@ import static org.lwjgl.glfw.GLFW.*;
  */
 public class ImGuiLayer extends Layer {
 
-    private ImGuiImplGl3 impl = new ImGuiImplGl3();
-    private float time;
-    private Application app;
+    private ImGuiImplGl3 implOpenGL = new ImGuiImplGl3();
+    private ImGuiImplGlfw implGLFW = new ImGuiImplGlfw();
 
     public ImGuiLayer() {
         super("ImGuiLayer");
-        this.app = Application.getInstance();
+        ClientLog.debug("ImGuiLayer::Init");
     }
 
     @Override
@@ -64,28 +64,48 @@ public class ImGuiLayer extends Layer {
         ImGui.setCurrentContext(ImGui.getCurrentContext());
         ImGuiIO io = ImGui.getIO();
 
+        io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
+        io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
+        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
         // Set backend flags and names.
         io.addBackendFlags(ImGuiBackendFlags.HasMouseCursors | ImGuiBackendFlags.HasSetMousePos);
         io.setBackendPlatformName("imgui_java_impl_glfw");
         io.setBackendRendererName("imgui_java_impl_opengl3");
 
+        ImGui.styleColorsDark();
+
+        ImGuiStyle style = ImGui.getStyle();
+
+        if ((io.getConfigFlags() & ImGuiConfigFlags.ViewportsEnable) != 0) {
+
+            style.setWindowRounding(0.0f);
+
+            // [0]X [1]Y [2]Z [3]W
+            style.getColors()[ImGuiCol.WindowBg][3] = 1.0f;
+        }
+
+        Application app = Application.getInstance();
+        long window = app.getWindow().getNativeWindow();
+
+        implGLFW.init(window, true);
+        implOpenGL.init("#version 410");
+
         // Map ImGui keys to GLFW keys.
-        io.setKeyMap(ImGuiKey.Tab, GLFW_KEY_TAB);
-        io.setKeyMap(ImGuiKey.LeftArrow, GLFW_KEY_LEFT);
-        io.setKeyMap(ImGuiKey.RightArrow, GLFW_KEY_RIGHT);
-        io.setKeyMap(ImGuiKey.UpArrow, GLFW_KEY_UP);
-        io.setKeyMap(ImGuiKey.DownArrow, GLFW_KEY_DOWN);
-        io.setKeyMap(ImGuiKey.Home, GLFW_KEY_HOME);
-        io.setKeyMap(ImGuiKey.End, GLFW_KEY_END);
-        io.setKeyMap(ImGuiKey.Insert, GLFW_KEY_INSERT);
-        io.setKeyMap(ImGuiKey.Delete, GLFW_KEY_DELETE);
-        io.setKeyMap(ImGuiKey.Backspace, GLFW_KEY_BACKSPACE);
-        io.setKeyMap(ImGuiKey.Space, GLFW_KEY_SPACE);
-        io.setKeyMap(ImGuiKey.Enter, GLFW_KEY_ENTER);
-        io.setKeyMap(ImGuiKey.Escape, GLFW_KEY_ESCAPE);
+        // io.setKeyMap(ImGuiKey.Tab, GLFW_KEY_TAB);
+        // io.setKeyMap(ImGuiKey.LeftArrow, GLFW_KEY_LEFT);
+        // io.setKeyMap(ImGuiKey.RightArrow, GLFW_KEY_RIGHT);
+        // io.setKeyMap(ImGuiKey.UpArrow, GLFW_KEY_UP);
+        // io.setKeyMap(ImGuiKey.DownArrow, GLFW_KEY_DOWN);
+        // io.setKeyMap(ImGuiKey.Home, GLFW_KEY_HOME);
+        // io.setKeyMap(ImGuiKey.End, GLFW_KEY_END);
+        // io.setKeyMap(ImGuiKey.Insert, GLFW_KEY_INSERT);
+        // io.setKeyMap(ImGuiKey.Delete, GLFW_KEY_DELETE);
+        // io.setKeyMap(ImGuiKey.Backspace, GLFW_KEY_BACKSPACE);
+        // io.setKeyMap(ImGuiKey.Space, GLFW_KEY_SPACE);
+        // io.setKeyMap(ImGuiKey.Enter, GLFW_KEY_ENTER);
+        // io.setKeyMap(ImGuiKey.Escape, GLFW_KEY_ESCAPE);
 
         // Initialize the ImGui OpenGL3 renderer.
-        impl.init("#version 410");
     }
 
     @Override
@@ -96,25 +116,42 @@ public class ImGuiLayer extends Layer {
 
     @Override
     public void onUpdate() {
-        // Update Dear ImGui for the current frame.
-        ClientLog.debug("ImGuiLayer::Update");
-        ImGuiIO io = ImGui.getIO();
+        syncDisplay();
+    }
 
-        // Set the display size and delta time for ImGui.
-        io.setDisplaySize(app.getWindow().getWidth(), app.getWindow().getHeight());
-        float time = (float) glfwGetTime();
-        io.setDeltaTime(this.time > 0.0f ? time - this.time : (1.0f / 60.0f));
-        this.time = time;
+    public void begin() {
 
+        syncDisplay();
         // Start a new ImGui frame.
         ImGui.newFrame();
+    }
 
-        // Show the ImGui demo window (optional).
-        ImGui.showDemoWindow();
+    public void end() {
 
-        // Render the ImGui draw data.
+        ImGuiIO io = syncDisplay();
+
         ImGui.render();
-        impl.renderDrawData(ImGui.getDrawData());
+        implOpenGL.renderDrawData(ImGui.getDrawData());
+
+        if ((io.getConfigFlags() & ImGuiConfigFlags.ViewportsEnable) != 0) {
+            long backup_current_context = glfwGetCurrentContext();
+            ImGui.updatePlatformWindows();
+            ImGui.renderPlatformWindowsDefault();
+            glfwMakeContextCurrent(backup_current_context);
+        }
+    }
+
+    public void onImGuiRender() {
+
+        ImGui.showDemoWindow();
+    }
+
+    private ImGuiIO syncDisplay() {
+        ImGuiIO io = ImGui.getIO();
+        Application app = Application.getInstance();
+        io.setDisplaySize(app.getWindow().getWidth(), app.getWindow().getHeight());
+
+        return io;
     }
 
     @Override
