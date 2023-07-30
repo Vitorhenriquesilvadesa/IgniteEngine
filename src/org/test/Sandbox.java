@@ -14,6 +14,7 @@ public class Sandbox extends Application {
 
     public void update() {
         callTickEvent("test", WindowsInput.isKeyPressed(KeyCode.TAB));
+        init();
     }
 
     public void testMethod() {

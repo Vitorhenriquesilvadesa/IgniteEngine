@@ -27,7 +27,9 @@ import org.ignite.platform.general.Window;
 import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
 import org.ignite.platform.windows.WindowsWindow;
+import org.ignite.system.exceptions.DuplicatedTickEventException;
 import org.ignite.system.exceptions.DuplicatedTriggerEventException;
+import org.ignite.system.exceptions.InexistentTickEventException;
 import org.ignite.system.exceptions.InexistentTriggerEventException;
 import org.ignite.system.functions.EventDescriptor;
 import org.ignite.system.functions.GenericFunction;
@@ -374,11 +376,11 @@ public abstract class Application {
      *
      * @param caller    The caller that will handle the tick event.
      * @param eventName The name of the tick event.
-     * @throws DuplicatedTriggerEventException if a tick event with the same name
+     * @throws DuplicatedTickEventException if a tick event with the same name
      *                                         already exists.
      */
 
-    public void addTickEvent(GenericFunction caller, String eventName) throws DuplicatedTriggerEventException {
+    public void addTickEvent(GenericFunction caller, String eventName) throws DuplicatedTickEventException {
         TickEvent tickEvent = new TickEvent(caller, eventName);
 
         if (!this.tickEvents.containsKey(eventName)) {
@@ -388,8 +390,8 @@ public abstract class Application {
 
         } else if (this.throwEventExceptions) {
 
-            throw new DuplicatedTriggerEventException(
-                    "The trigger with name: \"" + tickEvent.getDescriptor().getEventName() + "\" already exists");
+            throw new DuplicatedTickEventException(
+                    "The tick with name: \"" + tickEvent.getDescriptor().getEventName() + "\" already exists");
         }
     }
 
@@ -400,12 +402,12 @@ public abstract class Application {
      * @param caller          The caller that will handle the tick event.
      * @param eventName       The name of the tick event.
      * @param eventAttributes Additional attributes associated with the tick event.
-     * @throws DuplicatedTriggerEventException if a tick event with the same name
+     * @throws DuplicatedTickEventException if a tick event with the same name
      *                                         already exists.
      */
 
     public void addTickEvent(GenericFunction caller, String eventName, Object... eventAttributes)
-            throws DuplicatedTriggerEventException {
+            throws DuplicatedTickEventException {
 
         TickEvent tickEvent = new TickEvent(caller, new EventDescriptor(eventName, eventAttributes));
 
@@ -416,8 +418,8 @@ public abstract class Application {
 
         } else if (this.throwEventExceptions) {
 
-            throw new DuplicatedTriggerEventException(
-                    "The trigger with name: \"" + tickEvent.getDescriptor().getEventName() + "\" already exists");
+            throw new DuplicatedTickEventException(
+                    "The tick with name: \"" + tickEvent.getDescriptor().getEventName() + "\" already exists");
         }
     }
 
@@ -426,11 +428,11 @@ public abstract class Application {
      *
      * @param tickEventName The name of the tick event to retrieve.
      * @return The tick event associated with the given name.
-     * @throws InexistentTriggerEventException if the tick event with the given name
+     * @throws InexistentTickEventException if the tick event with the given name
      *                                         does not exist.
      */
 
-    private TickEvent getTickEvent(String tickEventName) throws InexistentTriggerEventException {
+    private TickEvent getTickEvent(String tickEventName) throws InexistentTickEventException {
 
         if (this.tickEvents.containsKey(tickEventName)) {
 
@@ -438,8 +440,8 @@ public abstract class Application {
 
         } else if (this.throwEventExceptions) {
 
-            throw new InexistentTriggerEventException(
-                    "The required trigger with name: \"" + tickEventName + "\" does not exist.");
+            throw new InexistentTickEventException(
+                    "The required tick with name: \"" + tickEventName + "\" does not exist.");
 
         } else {
             return null;
@@ -450,12 +452,12 @@ public abstract class Application {
      * Removes a tick event by its name.
      *
      * @param tickEventName The name of the tick event to remove.
-     * @throws InexistentTriggerEventException if the tick event with the given name
+     * @throws InexistentTickEventException if the tick event with the given name
      *                                         does not exist or has already been
      *                                         removed.
      */
 
-    public void removeTickEvent(String tickEventName) throws InexistentTriggerEventException {
+    public void removeTickEvent(String tickEventName) throws InexistentTickEventException {
 
         if (this.tickEventNames.contains(tickEventName)) {
 
@@ -464,7 +466,7 @@ public abstract class Application {
 
         } else if (this.throwEventExceptions) {
 
-            throw new InexistentTriggerEventException("The required trigger with name: \"" + tickEventName
+            throw new InexistentTickEventException("The required tick with name: \"" + tickEventName
                     + "\" does not exist or has already been removed.");
         }
     }
@@ -485,7 +487,7 @@ public abstract class Application {
             if ((event = this.getTickEvent(tickEventName)) == null) {
 
                 throw new InexistentTriggerEventException(
-                        "The required trigger with name: \"" + tickEventName + "\" does not exist.");
+                        "The required tick with name: \"" + tickEventName + "\" does not exist.");
             }
 
         } catch (InexistentTriggerEventException e) {
