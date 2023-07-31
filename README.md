@@ -42,7 +42,7 @@ Ignite Engine is an early-stage game engine developed in Java using the LWJGL (L
 4. Compile and run the project.
 
 ## Download
-You can download the latest version of the Ignite Engine JAR file from the [Release Page](https://github.com/Vitorhenriquesilvadesa/Java/tree/main/IgniteEngine/releases).
+You can download the latest version of the Ignite Engine JAR file from the [Release Page](https://github.com/Vitorhenriquesilvadesa/IgniteEngine/blob/main/releases/Releases.md).
 
 # Future Implementations
 
