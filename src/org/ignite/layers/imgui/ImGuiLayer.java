@@ -121,14 +121,16 @@ public class ImGuiLayer extends Layer {
 
     public void begin() {
 
-        syncDisplay();
         // Start a new ImGui frame.
+        this.implGLFW.newFrame();
         ImGui.newFrame();
     }
 
     public void end() {
 
-        ImGuiIO io = syncDisplay();
+        ImGuiIO io = ImGui.getIO();
+        Application app = Application.getInstance();
+        io.setDisplaySize((float) app.getWindow().getWidth(), (float) app.getWindow().getHeight());
 
         ImGui.render();
         implOpenGL.renderDrawData(ImGui.getDrawData());

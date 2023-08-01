@@ -171,15 +171,14 @@ public abstract class Application {
                 layer.onUpdate();
             }
 
-            // this.imGuiLayer.begin();
+            this.imGuiLayer.begin();
 
             for (Layer layer : this.layerStack) {
-                layer.begin();
+
                 layer.onImGuiRender();
-                layer.end();
             }
 
-            // this.imGuiLayer.end();
+            this.imGuiLayer.end();
 
             this.window.onUpdate();
         }
