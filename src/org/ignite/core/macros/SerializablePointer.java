@@ -167,7 +167,7 @@ public class SerializablePointer<T extends Serializable> extends Pointer<T> impl
      *            written.
      * @throws IOException If an I/O error occurs during the serialization process.
      */
-    private void writeObject(ObjectOutputStream out) throws IOException {
+    public void writeObject(ObjectOutputStream out) throws IOException {
         out.defaultWriteObject();
     }
 

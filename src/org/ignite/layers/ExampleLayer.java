@@ -30,6 +30,8 @@ import static org.ignite.core.app.Application.ClientLog;
 
 import org.ignite.events.Event;
 
+import imgui.ImGui;
+
 /**
  * The `ExampleLayer` class is an implementation of the `Layer` abstract class.
  * It serves as an example of how to create a custom layer for the Ignite
@@ -64,7 +66,9 @@ public class ExampleLayer extends Layer {
 
     @Override
     public void onImGuiRender() {
-
+        ImGui.begin("Test");
+        ImGui.text("Hello World");
+        ImGui.end();
     }
 
     @Override

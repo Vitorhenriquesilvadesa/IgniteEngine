@@ -44,6 +44,7 @@ import org.ignite.system.meta.Define;
 
 import static org.ignite.core.macros.Macros.*;
 import static org.lwjgl.opengl.GL11.*;
+import static org.lwjgl.opengl.GL30.*;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -90,6 +91,8 @@ public abstract class Application {
      */
     private boolean throwEventExceptions = true;
 
+    private int vertexArray, vertexBuffer, indexBuffer;
+
     /**
      * Constructs a new Application instance.
      * It creates the application's window with default properties and sets the
@@ -99,6 +102,30 @@ public abstract class Application {
         this.window = WindowsWindow.create(new WindowProps());
         this.window.setEventCallback(this::onEvent);
         this.imGuiLayer = new ImGuiLayer();
+
+        this.vertexArray = glGenVertexArrays();
+        glBindVertexArray(this.vertexArray);
+
+        this.vertexBuffer = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, this.vertexArray);
+
+        float[] vertices = new float[] {
+
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.0f, 0.5f, 0.0f
+        };
+
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+
+        glEnableVertexAttribArray(0);
+        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+
+        this.indexBuffer = glGenBuffers();
+        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.indexBuffer);
+
+        int[] indices = new int[] { 0, 1, 2 };
+        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
     }
 
     /**
@@ -161,11 +188,15 @@ public abstract class Application {
      */
     public void run() {
         this.start();
+        pushOverlay(imGuiLayer);
 
         while (Application.RUNNING) {
             this.update();
             glClearColor(0, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT);
+
+            glBindVertexArray(this.vertexArray);
+            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
 
             for (Layer layer : this.layerStack) {
                 layer.onUpdate();

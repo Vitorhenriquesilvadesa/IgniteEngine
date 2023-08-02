@@ -37,7 +37,6 @@ import java.util.Map;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWErrorCallbackI;
-
 import org.ignite.events.*;
 import org.ignite.platform.general.EventCallbackFn;
 import org.ignite.platform.general.Window;
@@ -116,6 +115,7 @@ public class WindowsWindow implements Window {
     private boolean VSync;
     private static boolean GLFWInitialized;
     private long window;
+    private GraphicsContext context;
     private WindowData data;
     private Map<Long, WindowData> windowDataMap = new HashMap<>();
 
@@ -129,6 +129,7 @@ public class WindowsWindow implements Window {
     }
 
     private void init(WindowProps props) {
+
         this.data = new WindowData(title, props.getWidth(), props.getHeight());
         this.data.title = props.getTitle();
         windowDataMap.put(window, data);
@@ -136,15 +137,19 @@ public class WindowsWindow implements Window {
         ClientLog.info("Creating window: " + props);
 
         if (!WindowsWindow.GLFWInitialized) {
+
             boolean success = glfwInit();
             _assert("Could not initialize GLFW!", success);
             glfwSetErrorCallback(new ErrorCallback());
         }
 
         this.window = glfwCreateWindow(props.getWidth(), props.getHeight(), props.getTitle(), NULL, NULL);
-        glfwDefaultWindowHints();
-        glfwMakeContextCurrent(this.window);
 
+        this.context = new OpenGLContext(this.window);
+
+        this.context.init();
+
+        glfwDefaultWindowHints();
         createCapabilities();
         setVSync(true);
 
@@ -249,7 +254,7 @@ public class WindowsWindow implements Window {
     @Override
     public void onUpdate() {
         glfwPollEvents();
-        glfwSwapBuffers(this.window);
+        this.context.swapBuffers();
     }
 
     @Override
