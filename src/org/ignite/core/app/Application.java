@@ -28,6 +28,7 @@ import org.ignite.platform.general.Window;
 import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
 import org.ignite.platform.windows.WindowsWindow;
+import org.ignite.renderer.Shader;
 import org.ignite.system.exceptions.DuplicatedTickEventException;
 import org.ignite.system.exceptions.DuplicatedTriggerEventException;
 import org.ignite.system.exceptions.InexistentTickEventException;
@@ -93,6 +94,8 @@ public abstract class Application {
 
     private int vertexArray, vertexBuffer, indexBuffer;
 
+    private Shader shader;
+
     /**
      * Constructs a new Application instance.
      * It creates the application's window with default properties and sets the
@@ -126,6 +129,9 @@ public abstract class Application {
 
         int[] indices = new int[] { 0, 1, 2 };
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+
+        this.shader = new Shader("renderer/shaders/vertex.shader",
+                "renderer/shaders/fragment.shader");
     }
 
     /**
@@ -157,7 +163,7 @@ public abstract class Application {
             System.setProperty("DEBUG", "true");
         }
 
-        Logger.setLineSeparator(true);
+        // Logger.setLineSeparator(true);
     }
 
     /**
@@ -195,8 +201,10 @@ public abstract class Application {
             glClearColor(0, 0, 0, 1);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            this.shader.bind();
             glBindVertexArray(this.vertexArray);
             glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+            this.shader.unbind();
 
             for (Layer layer : this.layerStack) {
                 layer.onUpdate();

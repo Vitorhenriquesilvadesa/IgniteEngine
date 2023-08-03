@@ -44,6 +44,8 @@ public final class Macros {
      */
     public static boolean DEBUG = true;
 
+    public static String workingDir = System.getProperty("user.dir") + "/src/org/ignite/";
+
     /**
      * Generates an integer with a single bit set to 1 at the specified position.
      *

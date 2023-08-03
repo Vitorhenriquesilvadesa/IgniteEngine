@@ -55,6 +55,7 @@ public class WindowsWindow implements Window {
      * It also contains the event callback function for the window.
      */
     public class WindowData {
+
         String title;
         int width;
         int height;

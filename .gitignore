@@ -3,3 +3,4 @@ bin/
 vendor/
 src/test/
 *.log
+*.gitignore

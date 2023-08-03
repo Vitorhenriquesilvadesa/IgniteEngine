@@ -1,9 +1,6 @@
 package org.ignite.platform.windows;
 
 import static org.lwjgl.glfw.GLFW.*;
-
-import org.lwjgl.opengl.GL11;
-
 import static org.ignite.core.macros.Macros.*;
 
 public class OpenGLContext extends GraphicsContext {
@@ -18,8 +15,6 @@ public class OpenGLContext extends GraphicsContext {
     @Override
     public void init() {
         glfwMakeContextCurrent(this.windowHandle);
-        String version = GL11.glGetString(GL11.GL_VERSION);
-        System.out.println("Versão do OpenGL: " + version);
     }
 
     @Override
