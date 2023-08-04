@@ -125,11 +125,32 @@ public class RawPointer<T extends Object> extends Pointer<T> {
         if (source == null || destination == null) {
             return;
         }
+
         Field[] fields = source.getClass().getDeclaredFields();
+
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.get(source);
             field.set(destination, value);
+        }
+    }
+
+    public void modifyAttribute(String fieldName, Object value) {
+        Field field;
+
+        try {
+            field = this.getReference().getClass().getDeclaredField(fieldName);
+            field.setAccessible(true);
+            field.set(this.getReference(), value);
+
+        } catch (NoSuchFieldException e) {
+            e.printStackTrace();
+        } catch (SecurityException e) {
+            e.printStackTrace();
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
         }
     }
 }

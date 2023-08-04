@@ -159,7 +159,7 @@ public class Logger {
      */
     public void exception(Exception exception) {
         setColor(LogColor.RED);
-        print("EXCEPTION", exception.getMessage() + ": " + exception.getStackTrace());
+        print("EXCEPTION", exception.getClass().getSimpleName() + " -> " + exception.getMessage());
         System.exit(-1);
     }
 
@@ -172,7 +172,7 @@ public class Logger {
      */
     public void exception(Object exception) {
         setColor(LogColor.RED);
-        print("EXCEPTION", exception.toString());
+        print("EXCEPTION", exception.getClass().getSimpleName() + ": " + exception.toString());
         System.exit(-1);
     }
 
@@ -181,6 +181,7 @@ public class Logger {
     }
 
     private void print(String handle, Object target) {
+
         this.dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
         Date date = new Date();
         String formatedDate = this.dateFormat.format(date);

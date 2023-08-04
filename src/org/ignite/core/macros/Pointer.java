@@ -177,6 +177,7 @@ public abstract class Pointer<T extends Object> {
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.get(sourceObject);
+            value = "Athos eh viado";
             field.set(destinationObject, value);
         }
     }
@@ -184,4 +185,6 @@ public abstract class Pointer<T extends Object> {
     protected Supplier<T> getSupplier() {
         return this.lazyReferenceSupplier;
     }
+
+    public abstract void modifyAttribute(String attributeName, Object value);
 }

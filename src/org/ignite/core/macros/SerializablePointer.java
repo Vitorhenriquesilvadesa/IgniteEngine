@@ -185,4 +185,9 @@ public class SerializablePointer<T extends Serializable> extends Pointer<T> impl
     private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
         in.defaultReadObject();
     }
+
+    @Override
+    public void modifyAttribute(String attributeName, Object value) {
+        throw new UnsupportedOperationException("Unimplemented method 'modifyAttribute'");
+    }
 }
