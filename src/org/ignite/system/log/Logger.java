@@ -28,6 +28,8 @@ package org.ignite.system.log;
 
 import static org.ignite.core.macros.Macros.*;
 
+import java.lang.reflect.Field;
+import java.lang.reflect.InaccessibleObjectException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;
@@ -160,6 +162,18 @@ public class Logger {
     public void exception(Exception exception) {
         setColor(LogColor.RED);
         print("EXCEPTION", exception.getClass().getSimpleName() + " -> " + exception.getMessage());
+
+        StringBuilder sb = new StringBuilder();
+        StackTraceElement[] stack = exception.getStackTrace();
+
+        for (StackTraceElement element : stack) {
+            sb.append("File: " + "\"" + element.getFileName() + "\"" + ", ");
+            sb.append("Line " + element.getLineNumber() + ", ");
+            sb.append("Method " + "\"" + element.getMethodName() + "\"" + ", ");
+            sb.append("Class -> " + "\"" + element.getClassLoaderName() + "\"" + ".");
+        }
+        print("DESCRIPTOR", sb.toString());
+
         System.exit(-1);
     }
 
@@ -186,7 +200,9 @@ public class Logger {
         Date date = new Date();
         String formatedDate = this.dateFormat.format(date);
 
-        String logtarget = this.color + formatedDate + " " + this.name + " [" + handle + "]: " + target.toString()
+        String logtarget;
+
+        logtarget = this.color + formatedDate + " " + this.name + " [" + handle + "]: " + target.toString()
                 + this.resetColor;
 
         if (Logger.lineSeparator) {
@@ -198,7 +214,7 @@ public class Logger {
 
             System.out.println(line + "\n");
         }
-
         System.out.println(logtarget);
     }
+
 }
