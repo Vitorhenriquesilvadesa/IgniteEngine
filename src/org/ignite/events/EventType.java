@@ -17,4 +17,5 @@ public final class EventType {
     public static final int MouseButtonReleased = 13;
     public static final int MouseMoved = 14;
     public static final int MouseScrolled = 15;
+    public static final int DoubleClick = 16;
 }

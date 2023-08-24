@@ -48,6 +48,7 @@ public class Logger {
     private DateFormat dateFormat;
 
     private static boolean lineSeparator = false;
+    private Exception exception;
 
     /**
      * Constructs a new `Logger` instance with the given name and log level.
@@ -163,8 +164,17 @@ public class Logger {
         setColor(LogColor.RED);
         print("EXCEPTION", exception.getClass().getSimpleName() + " -> " + exception.getMessage());
 
+        this.exception = exception;
+
+        if (DEBUG) {
+            System.exit(-1);
+        }
+    }
+
+    public void exceptionTrace() {
+
         StringBuilder sb = new StringBuilder();
-        StackTraceElement[] stack = exception.getStackTrace();
+        StackTraceElement[] stack = this.exception.getStackTrace();
 
         for (StackTraceElement element : stack) {
             sb.append("File: " + "\"" + element.getFileName() + "\"" + ", ");
@@ -172,9 +182,8 @@ public class Logger {
             sb.append("Method " + "\"" + element.getMethodName() + "\"" + ", ");
             sb.append("Class -> " + "\"" + element.getClassLoaderName() + "\"" + ".");
         }
-        print("DESCRIPTOR", sb.toString());
 
-        System.exit(-1);
+        print("DESCRIPTOR", sb.toString());
     }
 
     /**

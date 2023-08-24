@@ -242,7 +242,6 @@ public class WindowsWindow implements Window {
             MouseMovedEvent e = new MouseMovedEvent((float) xPos, (float) yPos);
             this.data.eventCallback(e);
         });
-
     }
 
     /**

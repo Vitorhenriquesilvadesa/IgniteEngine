@@ -17,9 +17,12 @@
 
 package org.ignite.core.app;
 
+import org.ignite.events.DoubleClickEvent;
 import org.ignite.events.Event;
+import org.ignite.events.EventCategory;
 import org.ignite.events.EventDispatcher;
 import org.ignite.events.EventType;
+import org.ignite.events.MouseButton;
 import org.ignite.events.WindowCloseEvent;
 import org.ignite.layers.Layer;
 import org.ignite.layers.LayerStack;
@@ -101,7 +104,7 @@ public abstract class Application {
      * It creates the application's window with default properties and sets the
      * event callback.
      */
-    public Application() {
+    protected Application() {
         this.window = WindowsWindow.create(new WindowProps());
         this.window.setEventCallback(this::onEvent);
         this.imGuiLayer = new ImGuiLayer();
@@ -192,6 +195,12 @@ public abstract class Application {
      * It calls the `start` method, then continuously updates the layers and the
      * application's window until the application is no longer running.
      */
+
+    public boolean doubleClick(Event e) {
+        System.out.println("Double Click");
+        return true;
+    }
+
     public void run() {
         this.start();
         pushOverlay(imGuiLayer);
@@ -260,7 +269,7 @@ public abstract class Application {
      *
      * @param layer The layer to be added.
      */
-    public void pushLayer(Layer layer) {
+    protected void pushLayer(Layer layer) {
         this.layerStack.pushLayer(layer);
         layer.onAttach();
     }
@@ -271,7 +280,7 @@ public abstract class Application {
      *
      * @param layer The overlay layer to be added.
      */
-    public void pushOverlay(Layer layer) {
+    protected void pushOverlay(Layer layer) {
         this.layerStack.pushOverlay(layer);
         layer.onAttach();
     }
@@ -311,7 +320,7 @@ public abstract class Application {
      * @throws DuplicatedTriggerEventException if a trigger event with the same name
      *                                         already exists.
      */
-    public void addTriggerEvent(GenericFunction caller, String eventName) throws DuplicatedTriggerEventException {
+    protected void addTriggerEvent(GenericFunction caller, String eventName) throws DuplicatedTriggerEventException {
 
         TriggerEvent triggerEvent = new TriggerEvent(caller, eventName);
 
@@ -338,7 +347,7 @@ public abstract class Application {
      * @throws DuplicatedTriggerEventException if a trigger event with the same name
      *                                         already exists.
      */
-    public void addTriggerEvent(GenericFunction caller, String eventName, Object... eventAttributes)
+    protected void addTriggerEvent(GenericFunction caller, String eventName, Object... eventAttributes)
             throws DuplicatedTriggerEventException {
 
         TriggerEvent triggerEvent = new TriggerEvent(caller, new EventDescriptor(eventName, eventAttributes));
@@ -389,7 +398,7 @@ public abstract class Application {
      *                                         does not exist or has already been
      *                                         removed.
      */
-    public void removeTriggerEvent(String triggerEventName) throws InexistentTriggerEventException {
+    protected void removeTriggerEvent(String triggerEventName) throws InexistentTriggerEventException {
 
         if (this.triggerEventNames.contains(triggerEventName)) {
 
@@ -409,7 +418,7 @@ public abstract class Application {
      * @param condition        The condition that determines whether the trigger
      *                         should be executed.
      */
-    public void callTriggerEvent(String triggerEventName, boolean condition) {
+    protected void callTriggerEvent(String triggerEventName, boolean condition) {
 
         TriggerEvent event;
 
@@ -442,7 +451,7 @@ public abstract class Application {
      *                                      already exists.
      */
 
-    public void addTickEvent(GenericFunction caller, String eventName) throws DuplicatedTickEventException {
+    protected void addTickEvent(GenericFunction caller, String eventName) throws DuplicatedTickEventException {
         TickEvent tickEvent = new TickEvent(caller, eventName);
 
         if (!this.tickEvents.containsKey(eventName)) {
@@ -468,7 +477,7 @@ public abstract class Application {
      *                                      already exists.
      */
 
-    public void addTickEvent(GenericFunction caller, String eventName, Object... eventAttributes)
+    protected void addTickEvent(GenericFunction caller, String eventName, Object... eventAttributes)
             throws DuplicatedTickEventException {
 
         TickEvent tickEvent = new TickEvent(caller, new EventDescriptor(eventName, eventAttributes));
@@ -519,7 +528,7 @@ public abstract class Application {
      *                                      removed.
      */
 
-    public void removeTickEvent(String tickEventName) throws InexistentTickEventException {
+    protected void removeTickEvent(String tickEventName) throws InexistentTickEventException {
 
         if (this.tickEventNames.contains(tickEventName)) {
 
@@ -541,7 +550,7 @@ public abstract class Application {
      *                      should be executed.
      */
 
-    public void callTickEvent(String tickEventName, boolean condition) {
+    protected void callTickEvent(String tickEventName, boolean condition) {
 
         TickEvent event;
 
@@ -566,11 +575,11 @@ public abstract class Application {
         tick.call(condition, event.getMethod());
     }
 
-    public void disableEventExceptions() {
+    protected void disableEventExceptions() {
         throwEventExceptions = false;
     }
 
-    public void enableEventExceptions() {
+    protected void enableEventExceptions() {
         throwEventExceptions = true;
     }
 }
