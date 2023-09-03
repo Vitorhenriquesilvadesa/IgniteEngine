@@ -17,12 +17,10 @@
 
 package org.ignite.core.app;
 
-import org.ignite.events.DoubleClickEvent;
+import org.ignite.core.macros.UniquePointer;
 import org.ignite.events.Event;
-import org.ignite.events.EventCategory;
 import org.ignite.events.EventDispatcher;
 import org.ignite.events.EventType;
-import org.ignite.events.MouseButton;
 import org.ignite.events.WindowCloseEvent;
 import org.ignite.layers.Layer;
 import org.ignite.layers.LayerStack;
@@ -32,6 +30,8 @@ import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
 import org.ignite.platform.windows.WindowsWindow;
 import org.ignite.renderer.Shader;
+import org.ignite.renderer.buffers.IndexBuffer;
+import org.ignite.renderer.buffers.VertexBuffer;
 import org.ignite.system.exceptions.DuplicatedTickEventException;
 import org.ignite.system.exceptions.DuplicatedTriggerEventException;
 import org.ignite.system.exceptions.InexistentTickEventException;
@@ -95,7 +95,10 @@ public abstract class Application {
      */
     private boolean throwEventExceptions = true;
 
-    private int vertexArray, vertexBuffer, indexBuffer;
+    private int vertexArray;
+
+    private UniquePointer<VertexBuffer> vertexBuffer = new UniquePointer<VertexBuffer>();
+    private UniquePointer<IndexBuffer> indexBuffer = new UniquePointer<IndexBuffer>();
 
     private Shader shader;
 
@@ -112,9 +115,6 @@ public abstract class Application {
         this.vertexArray = glGenVertexArrays();
         glBindVertexArray(this.vertexArray);
 
-        this.vertexBuffer = glGenBuffers();
-        glBindBuffer(GL_ARRAY_BUFFER, this.vertexArray);
-
         float[] vertices = new float[] {
 
                 -0.5f, -0.5f, 0.0f,
@@ -122,15 +122,17 @@ public abstract class Application {
                 0.0f, 0.5f, 0.0f
         };
 
+        this.vertexBuffer.reset(VertexBuffer.create(vertices));
+
         glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
 
         glEnableVertexAttribArray(0);
         glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
 
-        this.indexBuffer = glGenBuffers();
-        glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, this.indexBuffer);
-
         int[] indices = new int[] { 0, 1, 2 };
+
+        this.indexBuffer.reset(IndexBuffer.create(indices));
+
         glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
 
         this.shader = new Shader("renderer/shaders/vertex.shader",
@@ -181,8 +183,8 @@ public abstract class Application {
         dispatcher.dispatch(EventType.WindowClose, this::onWindowClose);
         ClientLog.debug(e);
 
-        for (int i = this.layerStack.size() - 1; i >= 0; i--) {
-            Layer layer = this.layerStack.get(i);
+        for (Layer layer : this.layerStack) {
+
             layer.onEvent(e);
             if (e.isHandled()) {
                 break;
@@ -195,11 +197,6 @@ public abstract class Application {
      * It calls the `start` method, then continuously updates the layers and the
      * application's window until the application is no longer running.
      */
-
-    public boolean doubleClick(Event e) {
-        System.out.println("Double Click");
-        return true;
-    }
 
     public void run() {
         this.start();

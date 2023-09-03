@@ -70,8 +70,8 @@ public class Shader {
         glDetachShader(program, vertexShader);
         glDetachShader(program, fragmentShader);
 
-        ClientLog.info(vertSource);
-        ClientLog.info(fragSource);
+        // ClientLog.debug(vertSource);
+        // ClientLog.debug(fragSource);
     }
 
     public void bind() {

@@ -1,25 +1,31 @@
 package org.ignite.renderer.buffers.glbuffers;
 
 import org.ignite.renderer.buffers.VertexBuffer;
+import static org.lwjgl.opengl.GL15.*;
 
-public class GLVertexBuffer extends VertexBuffer {
+public class GLVertexBuffer implements VertexBuffer {
+
+    private int rendererID;
+
+    public GLVertexBuffer(float[] vertices) {
+
+        this.rendererID = glGenBuffers();
+        glBindBuffer(GL_ARRAY_BUFFER, this.rendererID);
+        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+    }
+
+    @Override
+    public void destroy() {
+        glDeleteBuffers(this.rendererID);
+    }
 
     @Override
     public void bind() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'bind'");
+        glBindBuffer(GL_ARRAY_BUFFER, this.rendererID);
     }
 
     @Override
     public void unbind() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'unbind'");
+        glBindBuffer(GL_ARRAY_BUFFER, 0);
     }
-
-    @Override
-    public VertexBuffer create(float[] vertices) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'create'");
-    }
-
 }

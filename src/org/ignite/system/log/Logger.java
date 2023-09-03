@@ -28,8 +28,6 @@ package org.ignite.system.log;
 
 import static org.ignite.core.macros.Macros.*;
 
-import java.lang.reflect.Field;
-import java.lang.reflect.InaccessibleObjectException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
 import java.util.Date;

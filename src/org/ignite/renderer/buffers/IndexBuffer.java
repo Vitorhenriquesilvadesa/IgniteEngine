@@ -1,10 +1,33 @@
 package org.ignite.renderer.buffers;
 
-public abstract class IndexBuffer {
+import org.ignite.renderer.Renderer;
+import org.ignite.renderer.RendererAPI;
+import org.ignite.renderer.buffers.glbuffers.GLIndexBuffer;
+import static org.ignite.core.macros.Macros.*;
 
-    public abstract void bind();
+public interface IndexBuffer {
 
-    public abstract void unbind();
+    public void bind();
 
-    public abstract IndexBuffer create(int[] indices);
+    public void unbind();
+
+    public void destroy();
+
+    public int getCount();
+
+    public static IndexBuffer create(int[] indices) {
+        switch (Renderer.getAPI()) {
+            case RendererAPI.NONE: {
+                _assert("RendererAPI::NONE is currently not supported.", false);
+                return null;
+            }
+
+            case RendererAPI.OPENGL: {
+                return new GLIndexBuffer(indices);
+            }
+        }
+
+        _assert("Unknown renderer API.", false);
+        return null;
+    }
 }
