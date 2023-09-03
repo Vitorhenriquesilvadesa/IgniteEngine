@@ -10,7 +10,7 @@ import java.util.function.Supplier;
  *
  * @param <T> The type of object that this UniquePointer holds a reference to.
  */
-public class UniquePointer<T> extends RawPointer<T> {
+public class UniquePointer<T extends Destructible> extends RawPointer<T> {
 
     public UniquePointer() {
         super(() -> null);
@@ -40,6 +40,7 @@ public class UniquePointer<T> extends RawPointer<T> {
      * The referenced object will be eligible for garbage collection.
      */
     public void release() {
+        this.getReference().destroy();
         super.setReference(null);
     }
 
@@ -55,7 +56,11 @@ public class UniquePointer<T> extends RawPointer<T> {
     }
 
     public void reset(T ref) {
-        this.setReference(null);
+
+        if (this.getReference() != null) {
+            this.getReference().destroy();
+            this.setReference(null);
+        }
         this.setReference(ref);
     }
 }

@@ -5,7 +5,9 @@ import org.ignite.renderer.RendererAPI;
 import org.ignite.renderer.buffers.glbuffers.GLIndexBuffer;
 import static org.ignite.core.macros.Macros.*;
 
-public interface IndexBuffer {
+import org.ignite.core.macros.Destructible;
+
+public interface IndexBuffer extends Destructible {
 
     public void bind();
 

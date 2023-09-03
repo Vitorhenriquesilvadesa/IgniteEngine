@@ -1,17 +1,29 @@
 package org.ignite.renderer.buffers.glbuffers;
 
+import org.ignite.renderer.buffers.BufferLayout;
 import org.ignite.renderer.buffers.VertexBuffer;
 import static org.lwjgl.opengl.GL15.*;
 
 public class GLVertexBuffer implements VertexBuffer {
 
     private int rendererID;
+    private BufferLayout layout;
 
     public GLVertexBuffer(float[] vertices) {
 
         this.rendererID = glGenBuffers();
         glBindBuffer(GL_ARRAY_BUFFER, this.rendererID);
         glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+    }
+
+    @Override
+    public void setLayout(BufferLayout layout) {
+        this.layout = layout;
+    }
+
+    @Override
+    public BufferLayout getLayout() {
+        return this.layout;
     }
 
     @Override

@@ -30,7 +30,10 @@ import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
 import org.ignite.platform.windows.WindowsWindow;
 import org.ignite.renderer.Shader;
+import org.ignite.renderer.buffers.BufferElement;
+import org.ignite.renderer.buffers.BufferLayout;
 import org.ignite.renderer.buffers.IndexBuffer;
+import org.ignite.renderer.buffers.ShaderDataType;
 import org.ignite.renderer.buffers.VertexBuffer;
 import org.ignite.system.exceptions.DuplicatedTickEventException;
 import org.ignite.system.exceptions.DuplicatedTriggerEventException;
@@ -45,12 +48,14 @@ import org.ignite.system.functions.TriggerEvent;
 import org.ignite.system.log.LogLevel;
 import org.ignite.system.log.Logger;
 import org.ignite.system.meta.Define;
+import static org.ignite.renderer.buffers.DataTypeConverter.*;
 
 import static org.ignite.core.macros.Macros.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -108,6 +113,7 @@ public abstract class Application {
      * event callback.
      */
     protected Application() {
+
         this.window = WindowsWindow.create(new WindowProps());
         this.window.setEventCallback(this::onEvent);
         this.imGuiLayer = new ImGuiLayer();
@@ -117,19 +123,41 @@ public abstract class Application {
 
         float[] vertices = new float[] {
 
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.0f, 0.5f, 0.0f
+                -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
+                0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
+                0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
         };
+
+        int[] indices = new int[] { 0, 1, 2 };
 
         this.vertexBuffer.reset(VertexBuffer.create(vertices));
 
-        glBufferData(GL_ARRAY_BUFFER, vertices, GL_STATIC_DRAW);
+        {
+            BufferLayout layout = new BufferLayout(
+                    new BufferElement[] {
+                            new BufferElement(ShaderDataType.Float3, "a_Position"),
+                            new BufferElement(ShaderDataType.Float4, "a_Color")
+                    });
 
-        glEnableVertexAttribArray(0);
-        glVertexAttribPointer(0, 3, GL_FLOAT, false, 0, 0);
+            this.vertexBuffer.getReference().setLayout(layout);
+        }
 
-        int[] indices = new int[] { 0, 1, 2 };
+        int index = 0;
+        final BufferLayout layout = this.vertexBuffer.getReference().getLayout();
+
+        for (BufferElement element : layout) {
+
+            glEnableVertexAttribArray(index);
+
+            glVertexAttribPointer(index,
+                    element.getComponentCount(),
+                    shaderDataTypeToOpenGLBaseType(ShaderDataType.Float),
+                    element.normalized,
+                    layout.getStride(),
+                    element.offset);
+
+            index++;
+        }
 
         this.indexBuffer.reset(IndexBuffer.create(indices));
 
@@ -204,7 +232,7 @@ public abstract class Application {
 
         while (Application.RUNNING) {
             this.update();
-            glClearColor(0, 0, 0, 1);
+            glClearColor(0.1f, 0.1f, 0.1f, 1f);
             glClear(GL_COLOR_BUFFER_BIT);
 
             this.shader.bind();

@@ -3,15 +3,18 @@ package org.ignite.renderer.buffers;
 import org.ignite.renderer.Renderer;
 import org.ignite.renderer.RendererAPI;
 import org.ignite.renderer.buffers.glbuffers.GLVertexBuffer;
+import org.ignite.core.macros.Destructible;
 import static org.ignite.core.macros.Macros.*;
 
-public interface VertexBuffer {
+public interface VertexBuffer extends Destructible {
 
     public void bind();
 
     public void unbind();
 
-    public void destroy();
+    public void setLayout(BufferLayout layout);
+
+    public BufferLayout getLayout();
 
     public static VertexBuffer create(float[] vertices) {
 

@@ -42,7 +42,7 @@ public final class Macros {
      * Set this value to true during development and testing and false for
      * production.
      */
-    public static boolean DEBUG = true;
+    public static boolean DEBUG = false;
 
     public static String workingDir = System.getProperty("user.dir") + "/src/org/ignite/";
 
@@ -71,6 +71,14 @@ public final class Macros {
         for (boolean b : args) {
             if (!b) {
                 ClientLog.exception(message);
+            }
+        }
+    }
+
+    public static void _assert(Exception exception, boolean... args) {
+        for (boolean b : args) {
+            if (!b) {
+                ClientLog.exception(exception);
             }
         }
     }
