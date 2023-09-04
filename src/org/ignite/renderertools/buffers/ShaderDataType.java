@@ -1,4 +1,4 @@
-package org.ignite.renderer.buffers;
+package org.ignite.renderertools.buffers;
 
 public enum ShaderDataType {
 

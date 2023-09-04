@@ -1,8 +1,8 @@
-package org.ignite.renderer.buffers.glbuffers;
-
-import org.ignite.renderer.buffers.IndexBuffer;
+package org.ignite.renderertools.buffers.glbuffers;
 
 import static org.lwjgl.opengl.GL15.*;
+
+import org.ignite.renderertools.buffers.IndexBuffer;
 
 public class GLIndexBuffer implements IndexBuffer {
 

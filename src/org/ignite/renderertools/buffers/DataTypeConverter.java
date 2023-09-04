@@ -1,8 +1,9 @@
-package org.ignite.renderer.buffers;
+package org.ignite.renderertools.buffers;
 
 import static org.lwjgl.opengl.GL45.*;
 
-import org.ignite.renderer.buffers.exceptions.InvalidShaderDataTypeException;
+import org.ignite.renderertools.buffers.exceptions.InvalidShaderDataTypeException;
+
 import static org.ignite.core.macros.Macros.*;
 
 public final class DataTypeConverter {

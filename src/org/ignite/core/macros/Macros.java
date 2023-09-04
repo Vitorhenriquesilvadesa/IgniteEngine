@@ -28,6 +28,8 @@ package org.ignite.core.macros;
 
 import static org.ignite.core.app.Application.ClientLog;
 
+import org.ignite.core.macros.memory.Pointer;
+
 /**
  * The `Macros` class contains various utility methods and macros commonly used
  * in the Ignite Engine.

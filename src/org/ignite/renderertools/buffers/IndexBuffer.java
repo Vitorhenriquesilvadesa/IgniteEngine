@@ -1,11 +1,11 @@
-package org.ignite.renderer.buffers;
+package org.ignite.renderertools.buffers;
 
-import org.ignite.renderer.Renderer;
-import org.ignite.renderer.RendererAPI;
-import org.ignite.renderer.buffers.glbuffers.GLIndexBuffer;
 import static org.ignite.core.macros.Macros.*;
 
 import org.ignite.core.macros.Destructible;
+import org.ignite.renderertools.buffers.glbuffers.GLIndexBuffer;
+import org.ignite.renderertools.renderer.Renderer;
+import org.ignite.renderertools.renderer.RendererAPI;
 
 public interface IndexBuffer extends Destructible {
 

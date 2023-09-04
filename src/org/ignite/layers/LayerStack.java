@@ -30,7 +30,9 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-import org.ignite.core.macros.*;
+import org.ignite.core.macros.memory.Pointer;
+import org.ignite.core.macros.memory.RawPointer;
+
 import static org.ignite.core.macros.Macros.*;
 
 /**

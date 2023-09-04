@@ -1,4 +1,4 @@
-package org.ignite.renderer.buffers.exceptions;
+package org.ignite.renderertools.buffers.exceptions;
 
 public class InvalidShaderDataTypeException extends RuntimeException {
 

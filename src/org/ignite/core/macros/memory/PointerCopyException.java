@@ -1,4 +1,4 @@
-package org.ignite.core.macros;
+package org.ignite.core.macros.memory;
 
 public class PointerCopyException extends RuntimeException {
 

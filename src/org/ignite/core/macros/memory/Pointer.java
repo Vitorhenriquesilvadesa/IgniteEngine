@@ -24,7 +24,7 @@
  * 
  */
 
-package org.ignite.core.macros;
+package org.ignite.core.macros.memory;
 
 /**
  * File name: Pointer.java

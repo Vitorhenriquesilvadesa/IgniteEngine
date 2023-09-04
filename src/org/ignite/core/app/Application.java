@@ -17,7 +17,8 @@
 
 package org.ignite.core.app;
 
-import org.ignite.core.macros.UniquePointer;
+import org.ignite.core.macros.memory.SharedPointer;
+import org.ignite.core.macros.memory.UniquePointer;
 import org.ignite.events.Event;
 import org.ignite.events.EventDispatcher;
 import org.ignite.events.EventType;
@@ -29,12 +30,13 @@ import org.ignite.platform.general.Window;
 import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
 import org.ignite.platform.windows.WindowsWindow;
-import org.ignite.renderer.Shader;
-import org.ignite.renderer.buffers.BufferElement;
-import org.ignite.renderer.buffers.BufferLayout;
-import org.ignite.renderer.buffers.IndexBuffer;
-import org.ignite.renderer.buffers.ShaderDataType;
-import org.ignite.renderer.buffers.VertexBuffer;
+import org.ignite.renderertools.buffers.BufferElement;
+import org.ignite.renderertools.buffers.BufferLayout;
+import org.ignite.renderertools.buffers.IndexBuffer;
+import org.ignite.renderertools.buffers.ShaderDataType;
+import org.ignite.renderertools.buffers.VertexArray;
+import org.ignite.renderertools.buffers.VertexBuffer;
+import org.ignite.renderertools.shader.Shader;
 import org.ignite.system.exceptions.DuplicatedTickEventException;
 import org.ignite.system.exceptions.DuplicatedTriggerEventException;
 import org.ignite.system.exceptions.InexistentTickEventException;
@@ -48,14 +50,12 @@ import org.ignite.system.functions.TriggerEvent;
 import org.ignite.system.log.LogLevel;
 import org.ignite.system.log.Logger;
 import org.ignite.system.meta.Define;
-import static org.ignite.renderer.buffers.DataTypeConverter.*;
 
 import static org.ignite.core.macros.Macros.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -100,12 +100,15 @@ public abstract class Application {
      */
     private boolean throwEventExceptions = true;
 
-    private int vertexArray;
-
-    private UniquePointer<VertexBuffer> vertexBuffer = new UniquePointer<VertexBuffer>();
-    private UniquePointer<IndexBuffer> indexBuffer = new UniquePointer<IndexBuffer>();
+    private SharedPointer<VertexBuffer> vertexBuffer = new SharedPointer<VertexBuffer>();
+    private SharedPointer<VertexBuffer> squareVB = new SharedPointer<VertexBuffer>();
+    private SharedPointer<IndexBuffer> indexBuffer = new SharedPointer<IndexBuffer>();
+    private SharedPointer<IndexBuffer> squareIB = new SharedPointer<IndexBuffer>();
+    private SharedPointer<VertexArray> vertexArray = new SharedPointer<VertexArray>();
+    private SharedPointer<VertexArray> squareVA = new SharedPointer<VertexArray>();
 
     private Shader shader;
+    private Shader blueShader;
 
     /**
      * Constructs a new Application instance.
@@ -118,9 +121,6 @@ public abstract class Application {
         this.window.setEventCallback(this::onEvent);
         this.imGuiLayer = new ImGuiLayer();
 
-        this.vertexArray = glGenVertexArrays();
-        glBindVertexArray(this.vertexArray);
-
         float[] vertices = new float[] {
 
                 -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
@@ -128,43 +128,51 @@ public abstract class Application {
                 0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
         };
 
+        float[] square_vertices = new float[] {
+
+                -0.5f, -0.5f, 0.0f,
+                0.5f, -0.5f, 0.0f,
+                0.5f, 0.5f, 0.0f,
+                -0.5f, 0.5f, 0.0f
+        };
+
         int[] indices = new int[] { 0, 1, 2 };
+        int[] squareIndices = new int[] { 0, 1, 2, 2, 3, 0 };
+
+        this.vertexArray.reset(VertexArray.create());
+        this.squareVA.reset(VertexArray.create());
 
         this.vertexBuffer.reset(VertexBuffer.create(vertices));
+        this.squareVB.reset(VertexBuffer.create(square_vertices));
 
-        {
-            BufferLayout layout = new BufferLayout(
-                    new BufferElement[] {
-                            new BufferElement(ShaderDataType.Float3, "a_Position"),
-                            new BufferElement(ShaderDataType.Float4, "a_Color")
-                    });
+        BufferLayout layout = new BufferLayout(
+                new BufferElement[] {
+                        new BufferElement(ShaderDataType.Float3, "a_Position"),
+                        new BufferElement(ShaderDataType.Float4, "a_Color")
+                });
 
-            this.vertexBuffer.getReference().setLayout(layout);
-        }
+        BufferLayout blueLayout = new BufferLayout(
+                new BufferElement[] {
+                        new BufferElement(ShaderDataType.Float3, "a_Position")
+                });
 
-        int index = 0;
-        final BufferLayout layout = this.vertexBuffer.getReference().getLayout();
+        squareVB.getReference().setLayout(blueLayout);
+        squareVA.getReference().addVertexBuffer(squareVB);
 
-        for (BufferElement element : layout) {
-
-            glEnableVertexAttribArray(index);
-
-            glVertexAttribPointer(index,
-                    element.getComponentCount(),
-                    shaderDataTypeToOpenGLBaseType(ShaderDataType.Float),
-                    element.normalized,
-                    layout.getStride(),
-                    element.offset);
-
-            index++;
-        }
+        this.vertexBuffer.getReference().setLayout(layout);
+        this.vertexArray.getReference().addVertexBuffer(vertexBuffer);
 
         this.indexBuffer.reset(IndexBuffer.create(indices));
+        this.squareIB.reset(IndexBuffer.create(squareIndices));
 
-        glBufferData(GL_ELEMENT_ARRAY_BUFFER, indices, GL_STATIC_DRAW);
+        vertexArray.getReference().setIndexBuffer(indexBuffer);
+        squareVA.getReference().setIndexBuffer(squareIB);
 
-        this.shader = new Shader("renderer/shaders/vertex.shader",
-                "renderer/shaders/fragment.shader");
+        this.shader = new Shader("renderertools/shaders/vertex.shader",
+                "renderertools/shaders/fragment.shader");
+
+        this.blueShader = new Shader("renderertools/shaders/square_vertex.shader",
+                "renderertools/shaders/square_fragment.shader");
     }
 
     /**
@@ -235,9 +243,16 @@ public abstract class Application {
             glClearColor(0.1f, 0.1f, 0.1f, 1f);
             glClear(GL_COLOR_BUFFER_BIT);
 
+            this.blueShader.bind();
+            this.squareVA.getReference().bind();
+            glDrawElements(GL_TRIANGLES, this.squareVA.getReference().getIndexBuffer().getReference().getCount(),
+                    GL_UNSIGNED_INT, 0);
+            this.blueShader.unbind();
+
             this.shader.bind();
-            glBindVertexArray(this.vertexArray);
-            glDrawElements(GL_TRIANGLES, 3, GL_UNSIGNED_INT, 0);
+            this.vertexArray.getReference().bind();
+            glDrawElements(GL_TRIANGLES, this.vertexArray.getReference().getIndexBuffer().getReference().getCount(),
+                    GL_UNSIGNED_INT, 0);
             this.shader.unbind();
 
             for (Layer layer : this.layerStack) {

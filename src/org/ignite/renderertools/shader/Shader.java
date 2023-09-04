@@ -1,4 +1,4 @@
-package org.ignite.renderer;
+package org.ignite.renderertools.shader;
 
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL20.*;

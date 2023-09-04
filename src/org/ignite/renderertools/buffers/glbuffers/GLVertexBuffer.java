@@ -1,8 +1,9 @@
-package org.ignite.renderer.buffers.glbuffers;
+package org.ignite.renderertools.buffers.glbuffers;
 
-import org.ignite.renderer.buffers.BufferLayout;
-import org.ignite.renderer.buffers.VertexBuffer;
 import static org.lwjgl.opengl.GL15.*;
+
+import org.ignite.renderertools.buffers.BufferLayout;
+import org.ignite.renderertools.buffers.VertexBuffer;
 
 public class GLVertexBuffer implements VertexBuffer {
 

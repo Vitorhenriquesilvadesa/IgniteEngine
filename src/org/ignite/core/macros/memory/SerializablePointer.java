@@ -1,50 +1,57 @@
-package org.ignite.core.macros;
+package org.ignite.core.macros.memory;
 
 /**
- * File name: RawPointer.java
+ * File name: SerializablePointer.java
  * Creator: Lord Vtko
  * Creation Date: July 21, 2023
  * Version 1.0.0
  *
- * Description: This class defines a Basic Pointer. It provides methods for obtaining references,
+ * Description: This class defines a SerializablePointer that can be used as a pointer
+ *              to a serializable object. It provides methods for obtaining references,
  *              creating copies, and other operations related to manipulating the referenced object.
- *              The class extends the Pointer class.
+ *              The class extends the Pointer class and implements the Serializable interface.
  *
  * Copyright (c) 2023 Lord Vtko. All rights reserved.
  *
  * License: Free to use, but give credits for creator.
  */
 
+import java.io.*;
 import java.util.function.Supplier;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 
 /**
- * The RawPointer class defines a pointer that can hold a reference to an object
- * of type T.
- * It extends the Pointer class, providing methods for obtaining references,
- * creating copies,
- * and other operations related to manipulating the referenced object.
+ * A SerializablePointer is a type of pointer that can hold a reference to a
+ * Serializable object.
+ * It extends the Pointer class and implements the Serializable interface,
+ * allowing it to be serialized and deserialized.
+ * The SerializablePointer can lazily initialize its reference using a Supplier
+ * or directly with an object of type T.
+ * It also provides methods for copying the referenced object and its fields.
  *
- * @param <T> The type of object that this RawPointer holds a reference to.
+ * @param <T> The type of object that this SerializablePointer holds a reference
+ *            to, which must implement the Serializable interface.
  */
-public class RawPointer<T extends Object> extends Pointer<T> {
+public class SerializablePointer<T extends Serializable> extends Pointer<T> implements Serializable {
 
     /**
-     * Constructs a new RawPointer with lazy initialization using a Supplier.
+     * Constructs a new SerializablePointer with lazy initialization using a
+     * Supplier.
      *
      * @param lazyInitializer The Supplier used for lazy initialization of the
      *                        referenced object.
      */
-    public RawPointer(Supplier<T> lazyInitializer) {
+    public SerializablePointer(Supplier<T> lazyInitializer) {
         super(lazyInitializer);
     }
 
     /**
-     * Constructs a new RawPointer with a direct reference to an object.
+     * Constructs a new SerializablePointer with a direct reference to an object.
      *
-     * @param ref The object to be referenced by this RawPointer.
+     * @param ref The object to be referenced by this SerializablePointer.
      */
-    public RawPointer(T ref) {
+    public SerializablePointer(T ref) {
         super(ref);
     }
 
@@ -65,7 +72,7 @@ public class RawPointer<T extends Object> extends Pointer<T> {
     /**
      * Sets the reference to a new object.
      *
-     * @param newRef The new object to be referenced by this RawPointer.
+     * @param newRef The new object to be referenced by this SerializablePointer.
      */
     public void setReference(T newRef) {
         super.setReference(newRef);
@@ -98,17 +105,36 @@ public class RawPointer<T extends Object> extends Pointer<T> {
      */
     @SuppressWarnings("unchecked")
     public T getCopy() {
+
+        T newObject;
         try {
-            T newObject = (super.getReference() != null)
+            newObject = (super.getReference() != null)
                     ? (T) super.getReference().getClass().getDeclaredConstructor().newInstance()
                     : null;
 
             copyFields(super.getReference(), newObject);
             return newObject;
-        } catch (Exception e) {
+
+        } catch (InstantiationException e) {
             e.printStackTrace();
-            return null;
+
+        } catch (IllegalAccessException e) {
+            e.printStackTrace();
+
+        } catch (IllegalArgumentException e) {
+            e.printStackTrace();
+
+        } catch (InvocationTargetException e) {
+            e.printStackTrace();
+
+        } catch (NoSuchMethodException e) {
+            e.printStackTrace();
+
+        } catch (SecurityException e) {
+            e.printStackTrace();
         }
+
+        return null;
     }
 
     /**
@@ -125,9 +151,7 @@ public class RawPointer<T extends Object> extends Pointer<T> {
         if (source == null || destination == null) {
             return;
         }
-
         Field[] fields = source.getClass().getDeclaredFields();
-
         for (Field field : fields) {
             field.setAccessible(true);
             Object value = field.get(source);
@@ -135,22 +159,35 @@ public class RawPointer<T extends Object> extends Pointer<T> {
         }
     }
 
-    public void modifyAttribute(String fieldName, Object value) {
-        Field field;
+    /**
+     * Custom serialization method to write the SerializablePointer to an
+     * ObjectOutputStream.
+     *
+     * @param out The ObjectOutputStream to which the SerializablePointer will be
+     *            written.
+     * @throws IOException If an I/O error occurs during the serialization process.
+     */
+    public void writeObject(ObjectOutputStream out) throws IOException {
+        out.defaultWriteObject();
+    }
 
-        try {
-            field = this.getReference().getClass().getDeclaredField(fieldName);
-            field.setAccessible(true);
-            field.set(this.getReference(), value);
+    /**
+     * Custom deserialization method to read the SerializablePointer from an
+     * ObjectInputStream.
+     *
+     * @param in The ObjectInputStream from which the SerializablePointer will be
+     *           read.
+     * @throws IOException            If an I/O error occurs during the
+     *                                deserialization process.
+     * @throws ClassNotFoundException If the class of the SerializablePointer or its
+     *                                components cannot be found.
+     */
+    private void readObject(ObjectInputStream in) throws IOException, ClassNotFoundException {
+        in.defaultReadObject();
+    }
 
-        } catch (NoSuchFieldException e) {
-            e.printStackTrace();
-        } catch (SecurityException e) {
-            e.printStackTrace();
-        } catch (IllegalArgumentException e) {
-            e.printStackTrace();
-        } catch (IllegalAccessException e) {
-            e.printStackTrace();
-        }
+    @Override
+    public void modifyAttribute(String attributeName, Object value) {
+        throw new UnsupportedOperationException("Unimplemented method 'modifyAttribute'");
     }
 }

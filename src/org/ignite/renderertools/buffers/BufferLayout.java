@@ -1,9 +1,8 @@
-package org.ignite.renderer.buffers;
+package org.ignite.renderertools.buffers;
 
 import java.util.Arrays;
 import java.util.Iterator;
 import java.util.List;
-import static org.ignite.core.app.Application.ClientLog;
 
 public class BufferLayout implements Iterable<BufferElement> {
 

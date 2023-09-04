@@ -1,4 +1,4 @@
-package org.ignite.renderer;
+package org.ignite.renderertools.renderer;
 
 public class Renderer {
 

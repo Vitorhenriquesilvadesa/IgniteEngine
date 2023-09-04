@@ -1,7 +1,8 @@
-package org.ignite.renderer.buffers;
+package org.ignite.renderertools.buffers;
 
-import org.ignite.renderer.buffers.exceptions.InvalidShaderDataTypeException;
 import static org.ignite.core.macros.Macros.*;
+
+import org.ignite.renderertools.buffers.exceptions.InvalidShaderDataTypeException;
 
 public class BufferElement {
 
