@@ -24,7 +24,7 @@
  * 
  */
 
-package org.ignite.core.macros;
+package org.ignite.core.macros.debug;
 
 /**
  * The `Pair` class represents a generic pair of values.

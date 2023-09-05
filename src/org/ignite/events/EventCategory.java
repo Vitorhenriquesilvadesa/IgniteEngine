@@ -1,6 +1,6 @@
 package org.ignite.events;
 
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 
 public final class EventCategory {
 

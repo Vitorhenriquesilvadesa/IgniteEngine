@@ -26,14 +26,14 @@
 
 package org.ignite.layers;
 
+import static org.ignite.core.macros.debug.Macros.*;
+
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
 import org.ignite.core.macros.memory.Pointer;
 import org.ignite.core.macros.memory.RawPointer;
-
-import static org.ignite.core.macros.Macros.*;
 
 /**
  * The `LayerStack` class represents a stack of layers in the Ignite Engine.

@@ -24,7 +24,7 @@
  * 
  */
 
-package org.ignite.core.macros;
+package org.ignite.core.macros.debug;
 
 import static org.ignite.core.app.Application.ClientLog;
 

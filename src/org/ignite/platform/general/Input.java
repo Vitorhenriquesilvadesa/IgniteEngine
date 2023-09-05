@@ -26,7 +26,7 @@
 
 package org.ignite.platform.general;
 
-import org.ignite.core.macros.Pair;
+import org.ignite.core.macros.debug.Pair;
 
 /**
  * The `Input` abstract class provides an interface for handling input events

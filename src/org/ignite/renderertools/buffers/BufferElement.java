@@ -1,6 +1,6 @@
 package org.ignite.renderertools.buffers;
 
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 
 import org.ignite.renderertools.buffers.exceptions.InvalidShaderDataTypeException;
 

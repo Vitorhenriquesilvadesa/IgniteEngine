@@ -27,7 +27,7 @@
 package org.ignite.platform.windows;
 
 import static org.ignite.core.app.Application.ClientLog;
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 import static org.lwjgl.glfw.GLFW.*;
 import static org.lwjgl.opengl.GL.*;
 import static org.lwjgl.system.MemoryUtil.NULL;

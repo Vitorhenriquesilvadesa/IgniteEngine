@@ -1,13 +1,14 @@
 package org.ignite.renderertools.buffers;
 
-import org.ignite.renderertools.buffers.glbuffers.GLVertexArray;
+import org.ignite.renderertools.buffers.openglbuffers.GLVertexArray;
 import org.ignite.renderertools.renderer.Renderer;
 import org.ignite.renderertools.renderer.RendererAPI;
-import static org.ignite.core.macros.Macros.*;
+
+import static org.ignite.core.macros.debug.Macros.*;
 
 import java.util.List;
 
-import org.ignite.core.macros.Destructible;
+import org.ignite.core.macros.debug.Destructible;
 import org.ignite.core.macros.memory.SharedPointer;
 
 public interface VertexArray extends Destructible {

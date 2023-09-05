@@ -51,7 +51,7 @@ import org.ignite.system.log.LogLevel;
 import org.ignite.system.log.Logger;
 import org.ignite.system.meta.Define;
 
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 import static org.lwjgl.opengl.GL11.*;
 import static org.lwjgl.opengl.GL30.*;
 

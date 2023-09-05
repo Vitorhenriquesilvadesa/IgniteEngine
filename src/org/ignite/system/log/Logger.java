@@ -26,7 +26,7 @@
 
 package org.ignite.system.log;
 
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;

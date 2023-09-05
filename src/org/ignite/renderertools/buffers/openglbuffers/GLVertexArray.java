@@ -1,4 +1,4 @@
-package org.ignite.renderertools.buffers.glbuffers;
+package org.ignite.renderertools.buffers.openglbuffers;
 
 import java.util.ArrayList;
 import java.util.List;

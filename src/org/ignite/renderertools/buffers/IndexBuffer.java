@@ -1,9 +1,9 @@
 package org.ignite.renderertools.buffers;
 
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 
-import org.ignite.core.macros.Destructible;
-import org.ignite.renderertools.buffers.glbuffers.GLIndexBuffer;
+import org.ignite.core.macros.debug.Destructible;
+import org.ignite.renderertools.buffers.openglbuffers.GLIndexBuffer;
 import org.ignite.renderertools.renderer.Renderer;
 import org.ignite.renderertools.renderer.RendererAPI;
 

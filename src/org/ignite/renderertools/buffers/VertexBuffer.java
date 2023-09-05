@@ -1,11 +1,11 @@
 package org.ignite.renderertools.buffers;
 
-import org.ignite.core.macros.Destructible;
-import org.ignite.renderertools.buffers.glbuffers.GLVertexBuffer;
+import static org.ignite.core.macros.debug.Macros.*;
+
+import org.ignite.core.macros.debug.Destructible;
+import org.ignite.renderertools.buffers.openglbuffers.GLVertexBuffer;
 import org.ignite.renderertools.renderer.Renderer;
 import org.ignite.renderertools.renderer.RendererAPI;
-
-import static org.ignite.core.macros.Macros.*;
 
 public interface VertexBuffer extends Destructible {
 

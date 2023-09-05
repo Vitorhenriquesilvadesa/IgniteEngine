@@ -3,7 +3,7 @@ package org.ignite.core.macros.memory;
 import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
-import org.ignite.core.macros.Destructible;
+import org.ignite.core.macros.debug.Destructible;
 
 /**
  * The SharedPointer class defines a shared pointer that holds a reference to an

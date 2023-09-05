@@ -1,7 +1,7 @@
 package org.ignite.platform.windows;
 
+import static org.ignite.core.macros.debug.Macros.*;
 import static org.lwjgl.glfw.GLFW.*;
-import static org.ignite.core.macros.Macros.*;
 
 public class OpenGLContext extends GraphicsContext {
 

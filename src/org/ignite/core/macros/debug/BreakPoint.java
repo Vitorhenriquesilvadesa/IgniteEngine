@@ -24,7 +24,7 @@
  * 
  */
 
-package org.ignite.core.macros;
+package org.ignite.core.macros.debug;
 
 /**
  * The `BreakPoint` class represents a breakpoint in source code.

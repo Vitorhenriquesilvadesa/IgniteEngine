@@ -27,7 +27,7 @@
 package org.ignite.platform.windows;
 
 import org.ignite.core.app.Application;
-import org.ignite.core.macros.Pair;
+import org.ignite.core.macros.debug.Pair;
 import org.ignite.platform.general.Input;
 
 import static org.lwjgl.glfw.GLFW.*;

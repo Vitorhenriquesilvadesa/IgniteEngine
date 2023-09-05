@@ -9,7 +9,7 @@ import java.io.FileReader;
 import java.io.IOException;
 
 import static org.ignite.core.app.Application.ClientLog;
-import static org.ignite.core.macros.Macros.*;
+import static org.ignite.core.macros.debug.Macros.*;
 
 public class Shader {
 
