@@ -35,6 +35,7 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.util.HashMap;
 import java.util.Map;
 
+import org.ignite.system.meta.Define;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWErrorCallbackI;
 import org.ignite.events.*;
@@ -47,6 +48,8 @@ import org.ignite.platform.general.WindowProps;
  * functionality for creating and managing a GLFW window on Windows.
  * It enables event handling and OpenGL context management for the window.
  */
+
+@Define("IGNITE_API")
 public class WindowsWindow implements Window {
 
     /**

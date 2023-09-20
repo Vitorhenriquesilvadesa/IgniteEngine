@@ -16,6 +16,8 @@ package org.ignite.core.macros.memory;
  * License: Free to use, but give credits for creator.
  */
 
+import org.ignite.system.meta.Define;
+
 import java.io.*;
 import java.util.function.Supplier;
 import java.lang.reflect.Field;
@@ -33,6 +35,8 @@ import java.lang.reflect.InvocationTargetException;
  * @param <T> The type of object that this SerializablePointer holds a reference
  *            to, which must implement the Serializable interface.
  */
+
+@Define("IGNITE_API")
 public class SerializablePointer<T extends Serializable> extends Pointer<T> implements Serializable {
 
     /**

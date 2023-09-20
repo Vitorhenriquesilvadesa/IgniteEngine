@@ -29,6 +29,7 @@ package org.ignite.core.macros.debug;
 import static org.ignite.core.app.Application.ClientLog;
 
 import org.ignite.core.macros.memory.Pointer;
+import org.ignite.system.meta.Define;
 
 /**
  * The `Macros` class contains various utility methods and macros commonly used
@@ -36,6 +37,8 @@ import org.ignite.core.macros.memory.Pointer;
  * These methods provide functionality for debugging, assertion, and other
  * convenience operations.
  */
+
+@Define("IGNITE_API")
 public final class Macros {
 
     /**

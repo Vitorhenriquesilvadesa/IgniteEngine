@@ -34,11 +34,13 @@ import java.util.List;
 
 import org.ignite.core.macros.memory.Pointer;
 import org.ignite.core.macros.memory.RawPointer;
+import org.ignite.system.meta.Define;
 
 /**
  * The `LayerStack` class represents a stack of layers in the Ignite Engine.
  * It allows adding, removing, and iterating through layers in the stack.
  */
+@Define("IGNITE_API")
 public class LayerStack implements Iterable<Layer> {
 
     private List<Layer> layers;
@@ -133,8 +135,8 @@ public class LayerStack implements Iterable<Layer> {
      * Removes all layers from the stack and deletes them using the `_delete` macro.
      */
     public void clear() {
-        for (Layer l : this.layers) {
-            Pointer<Layer> ref = new RawPointer<Layer>(l);
+        for (Layer layer : this.layers) {
+            Pointer<Layer> ref = new RawPointer<Layer>(layer);
             _delete(ref);
         }
     }

@@ -27,6 +27,7 @@
 package org.ignite.platform.general;
 
 import org.ignite.core.macros.debug.Pair;
+import org.ignite.system.meta.Define;
 
 /**
  * The `Input` abstract class provides an interface for handling input events
@@ -34,6 +35,8 @@ import org.ignite.core.macros.debug.Pair;
  * Subclasses of `Input` should implement the methods to interact with the
  * specific input system.
  */
+
+@Define("IGNITE_API")
 public abstract class Input {
 
     protected static Input instance;

@@ -31,12 +31,15 @@ import static org.ignite.core.app.Application.ClientLog;
 import org.ignite.events.Event;
 
 import imgui.ImGui;
+import org.ignite.system.meta.Define;
 
 /**
  * The `ExampleLayer` class is an implementation of the `Layer` abstract class.
  * It serves as an example of how to create a custom layer for the Ignite
  * Engine.
  */
+
+@Define("IGNITE_API")
 public class ExampleLayer extends Layer {
 
     @Override

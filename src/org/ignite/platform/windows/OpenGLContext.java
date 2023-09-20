@@ -1,8 +1,11 @@
 package org.ignite.platform.windows;
 
+import org.ignite.system.meta.Define;
+
 import static org.ignite.core.macros.debug.Macros.*;
 import static org.lwjgl.glfw.GLFW.*;
 
+@Define("IGNITE_API")
 public class OpenGLContext extends GraphicsContext {
 
     private long windowHandle;

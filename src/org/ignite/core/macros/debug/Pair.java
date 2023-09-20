@@ -26,6 +26,8 @@
 
 package org.ignite.core.macros.debug;
 
+import org.ignite.system.meta.Define;
+
 /**
  * The `Pair` class represents a generic pair of values.
  * It holds two values of different types, T and F.
@@ -33,6 +35,8 @@ package org.ignite.core.macros.debug;
  * @param <T> The type of the first value.
  * @param <F> The type of the second value.
  */
+
+@Define("IGNITE_API")
 public class Pair<T, F> {
 
     private T Tvalue;

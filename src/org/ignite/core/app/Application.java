@@ -50,6 +50,7 @@ import org.ignite.system.functions.TriggerEvent;
 import org.ignite.system.log.LogLevel;
 import org.ignite.system.log.Logger;
 import org.ignite.system.meta.Define;
+import org.jetbrains.annotations.Nullable;
 
 import static org.ignite.core.macros.debug.Macros.*;
 import static org.lwjgl.opengl.GL11.*;
@@ -413,6 +414,7 @@ public abstract class Application {
      *                                         name
      *                                         does not exist.
      */
+    @Nullable
     private TriggerEvent getTriggerEvent(String triggerEventName) throws InexistentTriggerEventException {
 
         if (this.triggerEvents.containsKey(triggerEventName)) {
@@ -543,6 +545,7 @@ public abstract class Application {
      *                                      does not exist.
      */
 
+    @Nullable
     private TickEvent getTickEvent(String tickEventName) throws InexistentTickEventException {
 
         if (this.tickEvents.containsKey(tickEventName)) {

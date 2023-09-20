@@ -3,6 +3,7 @@ package org.ignite.core.macros.memory;
 import java.util.function.Supplier;
 
 import org.ignite.core.macros.debug.Destructible;
+import org.ignite.system.meta.Define;
 
 /**
  * The UniquePointer class defines a unique pointer that holds a reference to an
@@ -12,6 +13,8 @@ import org.ignite.core.macros.debug.Destructible;
  *
  * @param <T> The type of object that this UniquePointer holds a reference to.
  */
+
+@Define("IGNITE_API")
 public class UniquePointer<T extends Destructible> extends RawPointer<T> {
 
     public UniquePointer() {

@@ -26,11 +26,15 @@
 
 package org.ignite.core.macros.debug;
 
+import org.ignite.system.meta.Define;
+
 /**
  * The `BreakPoint` class represents a breakpoint in source code.
  * It holds information about the file and line number where the breakpoint is
  * set.
  */
+
+@Define("IGNITE_API")
 public class BreakPoint {
 
     private String file;

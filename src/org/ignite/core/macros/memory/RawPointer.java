@@ -15,6 +15,8 @@ package org.ignite.core.macros.memory;
  * License: Free to use, but give credits for creator.
  */
 
+import org.ignite.system.meta.Define;
+
 import java.util.function.Supplier;
 import java.lang.reflect.Field;
 
@@ -27,6 +29,8 @@ import java.lang.reflect.Field;
  *
  * @param <T> The type of object that this RawPointer holds a reference to.
  */
+
+@Define("IGNITE_API")
 public class RawPointer<T extends Object> extends Pointer<T> {
 
     /**

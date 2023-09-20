@@ -40,6 +40,8 @@ package org.ignite.core.macros.memory;
  * License: Free to use, but give credits for creator.
  */
 
+import org.ignite.system.meta.Define;
+
 import java.util.function.Supplier;
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
@@ -53,6 +55,8 @@ import java.lang.reflect.InvocationTargetException;
  *
  * @param <T> The type of object this RawPointer can hold.
  */
+
+@Define("IGNITE_API")
 public abstract class Pointer<T extends Object> {
 
     private T reference;

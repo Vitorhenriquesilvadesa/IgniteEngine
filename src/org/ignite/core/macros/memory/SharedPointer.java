@@ -4,6 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import org.ignite.core.macros.debug.Destructible;
+import org.ignite.system.meta.Define;
 
 /**
  * The SharedPointer class defines a shared pointer that holds a reference to an
@@ -14,6 +15,8 @@ import org.ignite.core.macros.debug.Destructible;
  *
  * @param <T> The type of object that this SharedPointer holds a reference to.
  */
+
+@Define("IGNITE_API")
 public class SharedPointer<T extends Destructible> extends RawPointer<T> {
 
     private final AtomicInteger refCount;

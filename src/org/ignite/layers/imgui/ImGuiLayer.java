@@ -37,6 +37,7 @@ import imgui.ImGuiStyle;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
+import org.ignite.system.meta.Define;
 
 import static org.lwjgl.opengl.GL11.*;
 
@@ -47,6 +48,8 @@ import static org.lwjgl.glfw.GLFW.*;
  * Ignite Engine.
  * It allows for debugging and user interface interactions.
  */
+
+@Define("IGNITE_API")
 public class ImGuiLayer extends Layer {
 
     private ImGuiImplGl3 implOpenGL = new ImGuiImplGl3();

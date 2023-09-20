@@ -1,5 +1,9 @@
 package org.ignite.core.macros.memory;
 
+
+import org.ignite.system.meta.Define;
+
+@Define("IGNITE_API")
 public class PointerCopyException extends RuntimeException {
 
     public PointerCopyException(String message) {
