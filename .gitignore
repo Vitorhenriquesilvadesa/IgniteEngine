@@ -4,3 +4,4 @@ vendor/
 src/test/
 *.log
 *.gitignore
+out/
