@@ -12,7 +12,15 @@ public class EntryPoint {
 
     public static Logger ClientLog = new Logger("ClientLog", 0);
 
+    public static void main(String[] args) {
+        Application.init();
+        Application.setInstance(new Sandbox());
+        Application.getInstance().run();
+    }
+
     public EntryPoint() {
+        
+
 
         /*
          * List<Class<?>> classes;
