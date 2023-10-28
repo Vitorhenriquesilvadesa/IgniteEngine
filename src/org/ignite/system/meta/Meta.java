@@ -48,13 +48,13 @@ public final class Meta {
     public static boolean check(String className, String annotation, String param) {
 
         try {
-            Class<?> checker = Class.forName("com.vtko." + className);
+            Class<?> checker = Class.forName("org." + className);
 
             Annotation[] annotations = checker.getDeclaredAnnotations();
 
             for (Annotation a : annotations) {
 
-                String annotationName = a.toString().replace("@com.vtko.meta.", "");
+                String annotationName = a.toString().replace("@org.ignite.system.meta.", "");
 
                 if (annotationName.startsWith(annotation)) {
 

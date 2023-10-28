@@ -34,7 +34,7 @@ import java.util.List;
 
 import org.ignite.core.macros.memory.Pointer;
 import org.ignite.core.macros.memory.RawPointer;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `LayerStack` class represents a stack of layers in the Ignite Engine.

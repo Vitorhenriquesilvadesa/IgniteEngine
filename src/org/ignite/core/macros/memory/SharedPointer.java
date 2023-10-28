@@ -4,7 +4,7 @@ import java.util.concurrent.atomic.AtomicInteger;
 import java.util.function.Supplier;
 
 import org.ignite.core.macros.debug.Destructible;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The SharedPointer class defines a shared pointer that holds a reference to an
@@ -57,7 +57,7 @@ public class SharedPointer<T extends Destructible> extends RawPointer<T> {
     public SharedPointer(SharedPointer<T> other) {
         super(other.getReference());
         this.refCount = other.refCount;
-        this.refCount.incrementAndGet(); // Increment the reference count
+        this.refCount.incrementAndGet();
     }
 
     /**

@@ -16,7 +16,7 @@ package org.ignite.core.macros.memory;
  * License: Free to use, but give credits for creator.
  */
 
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 import java.io.*;
 import java.util.function.Supplier;

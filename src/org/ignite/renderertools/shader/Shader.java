@@ -87,7 +87,7 @@ public class Shader {
         StringBuilder sb = new StringBuilder();
 
         try {
-            BufferedReader reader = new BufferedReader(new FileReader(workingDir + filePath));
+            BufferedReader reader = new BufferedReader(new FileReader(workingDir + "src/org/ignite/" + filePath));
             String line;
 
             while ((line = reader.readLine()) != null) {

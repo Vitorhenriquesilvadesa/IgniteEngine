@@ -2,43 +2,29 @@
  * Ignite Engine - A powerful game engine in Java.
  *
  * @license MIT License
- *
  * @author Creator: Lord Vtko
  * @version 1.0.0
  * @since 2023-07-28
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
- * 
  */
 
 package org.ignite.layers.imgui;
 
 import static org.ignite.core.app.Application.ClientLog;
+
+import imgui.*;
+import imgui.extension.imnodes.ImNodes;
 import org.ignite.core.app.Application;
+import org.ignite.core.app.Time;
 import org.ignite.events.*;
 import org.ignite.layers.Layer;
 
-import imgui.ImGui;
-import imgui.ImGuiIO;
-import imgui.ImGuiStyle;
 import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
+import org.ignite.system.debbuging.DebugConsole;
 
+import static org.ignite.core.macros.debug.Macros.workingDir;
 import static org.lwjgl.opengl.GL11.*;
 
 import static org.lwjgl.glfw.GLFW.*;
@@ -54,6 +40,15 @@ public class ImGuiLayer extends Layer {
 
     private ImGuiImplGl3 implOpenGL = new ImGuiImplGl3();
     private ImGuiImplGlfw implGLFW = new ImGuiImplGlfw();
+    public ImGuiElement leftMenuBackground = new ImGuiLeftMenuBackground();
+    public ImGuiElement fileDialog = new ImGuiFileDialog();
+    public ImGuiElement fpsDisplay;
+    public ImGuiElement screenDisplay = new ImGuiScreenDisplay(300, 0);
+    public ImGuiTopMenu topMenu = new ImGuiTopMenu();
+    public ImGuiFileExplorer fileExplorer;
+
+    public ImGuiRightMenu rightMenu;
+    public static ImGuiTheme theme = ImGuiTheme.getTheme(ImGuiThemes.OneDark);
 
     public ImGuiLayer() {
         super("ImGuiLayer");
@@ -69,8 +64,12 @@ public class ImGuiLayer extends Layer {
 
         io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
-        io.addConfigFlags(ImGuiConfigFlags.ViewportsEnable);
-        // Set backend flags and names.
+
+        String fontPath = workingDir + "res/fonts/Ubuntu-Regular.ttf";
+        float fontSize = 20.0f;
+        ImFont font = io.getFonts().addFontFromFileTTF(fontPath, fontSize);
+        io.setFontDefault(font);
+
         io.addBackendFlags(ImGuiBackendFlags.HasMouseCursors | ImGuiBackendFlags.HasSetMousePos);
         io.setBackendPlatformName("imgui_java_impl_glfw");
         io.setBackendRendererName("imgui_java_impl_opengl3");
@@ -79,36 +78,15 @@ public class ImGuiLayer extends Layer {
 
         ImGuiStyle style = ImGui.getStyle();
 
-        if ((io.getConfigFlags() & ImGuiConfigFlags.ViewportsEnable) != 0) {
-
-            style.setWindowRounding(0.0f);
-
-            // [0]X [1]Y [2]Z [3]W
-            style.getColors()[ImGuiCol.WindowBg][3] = 1.0f;
-        }
-
         Application app = Application.getInstance();
         long window = app.getWindow().getNativeWindow();
 
         implGLFW.init(window, true);
         implOpenGL.init("#version 410");
 
-        // Map ImGui keys to GLFW keys.
-        // io.setKeyMap(ImGuiKey.Tab, GLFW_KEY_TAB);
-        // io.setKeyMap(ImGuiKey.LeftArrow, GLFW_KEY_LEFT);
-        // io.setKeyMap(ImGuiKey.RightArrow, GLFW_KEY_RIGHT);
-        // io.setKeyMap(ImGuiKey.UpArrow, GLFW_KEY_UP);
-        // io.setKeyMap(ImGuiKey.DownArrow, GLFW_KEY_DOWN);
-        // io.setKeyMap(ImGuiKey.Home, GLFW_KEY_HOME);
-        // io.setKeyMap(ImGuiKey.End, GLFW_KEY_END);
-        // io.setKeyMap(ImGuiKey.Insert, GLFW_KEY_INSERT);
-        // io.setKeyMap(ImGuiKey.Delete, GLFW_KEY_DELETE);
-        // io.setKeyMap(ImGuiKey.Backspace, GLFW_KEY_BACKSPACE);
-        // io.setKeyMap(ImGuiKey.Space, GLFW_KEY_SPACE);
-        // io.setKeyMap(ImGuiKey.Enter, GLFW_KEY_ENTER);
-        // io.setKeyMap(ImGuiKey.Escape, GLFW_KEY_ESCAPE);
-
-        // Initialize the ImGui OpenGL3 renderer.
+        this.fpsDisplay = new ImGuiFPSDisplay(0, Application.getInstance().getWindow().getHeight() - 40);
+        this.fileExplorer = new ImGuiFileExplorer();
+        this.rightMenu = new ImGuiRightMenu();
     }
 
     @Override
@@ -125,7 +103,7 @@ public class ImGuiLayer extends Layer {
     public void begin() {
 
         // Start a new ImGui frame.
-        this.implGLFW.newFrame();
+        //this.implGLFW.newFrame();
         ImGui.newFrame();
     }
 
@@ -147,16 +125,40 @@ public class ImGuiLayer extends Layer {
     }
 
     public void onImGuiRender() {
+        ImGui.getIO().setConfigFlags(ImGui.getIO().getConfigFlags() | ImGuiConfigFlags.DockingEnable);
 
-        ImGui.showDemoWindow();
+        theme.applyTheme();
+
+        Application app = Application.getInstance();
+        ImGuiStyle style = ImGui.getStyle();
+
+        leftMenuBackground.renderElement();
+        fileDialog.renderElement();
+        fpsDisplay.renderElement();
+        screenDisplay.renderElement();
+        topMenu.renderElement();
+        fileExplorer.renderElement();
+        rightMenu.renderElement();
+
+        ImGui.setNextWindowSize(app.getWindow().getWidth() - 600, app.getWindow().getHeight(), ImGuiCond.Once);
+
+        if(ImGui.begin("Debugging Console", ImGuiWindowFlags.NoCollapse)){
+
+            for(String s : DebugConsole.getDebugMessages()){
+                ImGui.text(s);
+            }
+
+            ImGui.end();
+        }
     }
 
-    private ImGuiIO syncDisplay() {
+
+
+    private void syncDisplay() {
         ImGuiIO io = ImGui.getIO();
         Application app = Application.getInstance();
         io.setDisplaySize(app.getWindow().getWidth(), app.getWindow().getHeight());
 
-        return io;
     }
 
     @Override

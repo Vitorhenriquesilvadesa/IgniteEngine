@@ -1,9 +1,0 @@
-<component name="libraryTable">
-  <library name="ignite_source">
-    <CLASSES>
-      <root url="jar://$PROJECT_DIR$/releases/ignite_source.zip!/" />
-    </CLASSES>
-    <JAVADOC />
-    <SOURCES />
-  </library>
-</component>

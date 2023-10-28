@@ -29,7 +29,7 @@ package org.ignite.platform.windows;
 import org.ignite.core.app.Application;
 import org.ignite.core.macros.debug.Pair;
 import org.ignite.platform.general.Input;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 import static org.lwjgl.glfw.GLFW.*;
 

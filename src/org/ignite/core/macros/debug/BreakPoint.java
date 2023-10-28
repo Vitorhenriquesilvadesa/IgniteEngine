@@ -26,7 +26,7 @@
 
 package org.ignite.core.macros.debug;
 
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `BreakPoint` class represents a breakpoint in source code.

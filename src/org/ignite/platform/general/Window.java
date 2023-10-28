@@ -27,7 +27,7 @@
 package org.ignite.platform.general;
 
 import org.ignite.events.*;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `Window` interface defines the common methods and properties for a

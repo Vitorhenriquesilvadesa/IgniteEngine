@@ -3,7 +3,7 @@ package org.ignite.core.macros.memory;
 import java.util.function.Supplier;
 
 import org.ignite.core.macros.debug.Destructible;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The UniquePointer class defines a unique pointer that holds a reference to an

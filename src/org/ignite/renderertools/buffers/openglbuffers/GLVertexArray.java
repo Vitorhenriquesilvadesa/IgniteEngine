@@ -3,13 +3,13 @@ package org.ignite.renderertools.buffers.openglbuffers;
 import java.util.ArrayList;
 import java.util.List;
 import org.ignite.core.macros.memory.SharedPointer;
-import org.ignite.renderertools.buffers.BufferElement;
-import org.ignite.renderertools.buffers.BufferLayout;
-import org.ignite.renderertools.buffers.IndexBuffer;
-import org.ignite.renderertools.buffers.ShaderDataType;
-import org.ignite.renderertools.buffers.VertexArray;
-import org.ignite.renderertools.buffers.VertexBuffer;
-import static org.ignite.renderertools.buffers.DataTypeConverter.*;
+import org.ignite.renderertools.buffers.general.BufferElement;
+import org.ignite.renderertools.buffers.general.BufferLayout;
+import org.ignite.renderertools.buffers.general.IndexBuffer;
+import org.ignite.renderertools.buffers.general.ShaderDataType;
+import org.ignite.renderertools.buffers.general.VertexArray;
+import org.ignite.renderertools.buffers.general.VertexBuffer;
+import static org.ignite.renderertools.buffers.general.DataTypeConverter.*;
 import static org.lwjgl.opengl.GL20.glEnableVertexAttribArray;
 import static org.lwjgl.opengl.GL20.glVertexAttribPointer;
 import static org.lwjgl.opengl.GL30.glBindVertexArray;
@@ -25,7 +25,6 @@ public class GLVertexArray implements VertexArray {
         this.vertexBuffers = new ArrayList<SharedPointer<VertexBuffer>>();
         this.indexBuffer = new SharedPointer<IndexBuffer>();
         this.rendererID = glCreateVertexArrays();
-
     }
 
     @Override

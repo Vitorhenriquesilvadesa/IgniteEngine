@@ -9,5 +9,4 @@ public class InvalidShaderDataTypeException extends RuntimeException {
     public InvalidShaderDataTypeException(String message) {
         super(message);
     }
-
 }

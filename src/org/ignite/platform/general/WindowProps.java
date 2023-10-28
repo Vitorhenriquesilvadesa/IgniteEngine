@@ -26,7 +26,7 @@
 
 package org.ignite.platform.general;
 
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `WindowProps` class represents the properties of a window.

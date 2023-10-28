@@ -29,7 +29,7 @@ package org.ignite.core.macros.debug;
 import static org.ignite.core.app.Application.ClientLog;
 
 import org.ignite.core.macros.memory.Pointer;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `Macros` class contains various utility methods and macros commonly used
@@ -49,7 +49,7 @@ public final class Macros {
      */
     public static boolean DEBUG = false;
 
-    public static String workingDir = System.getProperty("user.dir") + "/src/org/ignite/";
+    public static String workingDir = System.getProperty("user.dir") + "/";
 
     /**
      * Generates an integer with a single bit set to 1 at the specified position.

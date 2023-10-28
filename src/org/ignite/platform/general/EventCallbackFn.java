@@ -27,7 +27,7 @@
 package org.ignite.platform.general;
 
 import org.ignite.events.Event;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 @Define("IGNITE_API")
 @FunctionalInterface

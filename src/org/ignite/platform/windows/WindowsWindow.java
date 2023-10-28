@@ -35,7 +35,9 @@ import static org.lwjgl.system.MemoryUtil.NULL;
 import java.util.HashMap;
 import java.util.Map;
 
-import org.ignite.system.meta.Define;
+import org.ignite.platform.general.GraphicsContext;
+import org.ignite.platform.opengl.OpenGLContext;
+import org.ignite.annotations.Define;
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWErrorCallbackI;
 import org.ignite.events.*;

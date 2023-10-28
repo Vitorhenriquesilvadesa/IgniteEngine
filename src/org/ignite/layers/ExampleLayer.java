@@ -31,7 +31,7 @@ import static org.ignite.core.app.Application.ClientLog;
 import org.ignite.events.Event;
 
 import imgui.ImGui;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `ExampleLayer` class is an implementation of the `Layer` abstract class.

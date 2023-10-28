@@ -2,10 +2,19 @@
  * Ignite Engine - A powerful game engine in Java.
  *
  * @license MIT License
- *
  * @author Creator: Lord Vtko
  * @version 1.0.0
  * @since 2023-07-28
+ * <p>
+ * The `Application` class represents the base class for creating and running an
+ * Ignite Engine application.
+ * It provides functionalities to manage the application's window, layers,
+ * events, and triggers.
+ * <p>
+ * The `Application` class represents the base class for creating and running an
+ * Ignite Engine application.
+ * It provides functionalities to manage the application's window, layers,
+ * events, and triggers.
  */
 
 /**
@@ -18,57 +27,39 @@
 package org.ignite.core.app;
 
 import org.ignite.core.macros.memory.SharedPointer;
-import org.ignite.core.macros.memory.UniquePointer;
-import org.ignite.events.Event;
-import org.ignite.events.EventDispatcher;
-import org.ignite.events.EventType;
-import org.ignite.events.WindowCloseEvent;
+import org.ignite.events.*;
 import org.ignite.layers.Layer;
 import org.ignite.layers.LayerStack;
 import org.ignite.layers.imgui.ImGuiLayer;
+import org.ignite.mathf.Vector4;
 import org.ignite.platform.general.Window;
 import org.ignite.platform.general.WindowProps;
 import org.ignite.platform.windows.WindowsInput;
 import org.ignite.platform.windows.WindowsWindow;
-import org.ignite.renderertools.buffers.BufferElement;
-import org.ignite.renderertools.buffers.BufferLayout;
-import org.ignite.renderertools.buffers.IndexBuffer;
-import org.ignite.renderertools.buffers.ShaderDataType;
-import org.ignite.renderertools.buffers.VertexArray;
-import org.ignite.renderertools.buffers.VertexBuffer;
+import org.ignite.renderertools.buffers.general.*;
+import org.ignite.renderertools.renderer.RenderCommand;
+import org.ignite.renderertools.renderer.Renderer;
+import org.ignite.renderertools.renderer.RendererAPI;
 import org.ignite.renderertools.shader.Shader;
-import org.ignite.system.exceptions.DuplicatedTickEventException;
-import org.ignite.system.exceptions.DuplicatedTriggerEventException;
-import org.ignite.system.exceptions.InexistentTickEventException;
-import org.ignite.system.exceptions.InexistentTriggerEventException;
-import org.ignite.system.functions.EventDescriptor;
-import org.ignite.system.functions.GenericFunction;
-import org.ignite.system.functions.Tick;
-import org.ignite.system.functions.TickEvent;
-import org.ignite.system.functions.Trigger;
-import org.ignite.system.functions.TriggerEvent;
+import org.ignite.system.debbuging.DebugConsole;
 import org.ignite.system.log.LogLevel;
 import org.ignite.system.log.Logger;
-import org.ignite.system.meta.Define;
-import org.jetbrains.annotations.Nullable;
+import org.ignite.annotations.Define;
 
 import static org.ignite.core.macros.debug.Macros.*;
-import static org.lwjgl.opengl.GL11.*;
-import static org.lwjgl.opengl.GL30.*;
 
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.lang.reflect.InvocationTargetException;
 
 @Define("IGNITE_API")
-public abstract class Application {
+public abstract class Application extends EventManager {
 
     /** The logger for client-side logs. */
     public static Logger ClientLog = new Logger("Ignite Engine", LogLevel.TRACE);
 
     /** Flag to indicate if the application is running. */
-    private static boolean RUNNING = true;
+    protected static boolean RUNNING = true;
+
+    public static float FPS = 0f;
 
     /** The main window of the application. */
     private Window window;
@@ -78,18 +69,6 @@ public abstract class Application {
 
     /** The instance of the application (singleton). */
     protected static Application app;
-
-    /** Map to store trigger events by their names. */
-    private Map<String, TriggerEvent> triggerEvents = new HashMap<String, TriggerEvent>();
-
-    /** Map to store tick events by their names. */
-    private Map<String, TickEvent> tickEvents = new HashMap<String, TickEvent>();
-
-    /** List to store the names of trigger events in the order they were added. */
-    private List<String> triggerEventNames = new ArrayList<String>();
-
-    /** List to store the names of tick events in the order they were added. */
-    private List<String> tickEventNames = new ArrayList<String>();
 
     private static boolean isInit = false;
 
@@ -122,23 +101,23 @@ public abstract class Application {
         this.window.setEventCallback(this::onEvent);
         this.imGuiLayer = new ImGuiLayer();
 
-        float[] vertices = new float[] {
+        float[] vertices = new float[]{
 
-                -0.5f, -0.5f, 0.0f, 1.0f, 0.0f, 0.0f, 1.0f,
-                0.5f, -0.5f, 0.0f, 0.0f, 1.0f, 0.0f, 1.0f,
-                0.0f, 0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+                -0.5f, -0.5f, 0.0f, 1.0f, 1.0f, 0.0f, 1.0f,
+                0.5f, -0.5f, 0.0f, 0.0f, 0.0f, 1.0f, 1.0f,
+                0.0f, 0.5f, 0.0f, 1.0f, 0.0f, 1.0f, 1.0f,
         };
 
-        float[] square_vertices = new float[] {
+        float[] square_vertices = new float[]{
 
-                -0.5f, -0.5f, 0.0f,
-                0.5f, -0.5f, 0.0f,
-                0.5f, 0.5f, 0.0f,
-                -0.5f, 0.5f, 0.0f
+                -0.8f, -0.8f, 0.0f,
+                0.8f, -0.8f, 0.0f,
+                0.8f, 0.8f, 0.0f,
+                -0.8f, 0.8f, 0.0f
         };
 
-        int[] indices = new int[] { 0, 1, 2 };
-        int[] squareIndices = new int[] { 0, 1, 2, 2, 3, 0 };
+        int[] indices = new int[]{0, 1, 2};
+        int[] squareIndices = new int[]{0, 1, 2, 2, 3, 0};
 
         this.vertexArray.reset(VertexArray.create());
         this.squareVA.reset(VertexArray.create());
@@ -147,15 +126,10 @@ public abstract class Application {
         this.squareVB.reset(VertexBuffer.create(square_vertices));
 
         BufferLayout layout = new BufferLayout(
-                new BufferElement[] {
-                        new BufferElement(ShaderDataType.Float3, "a_Position"),
-                        new BufferElement(ShaderDataType.Float4, "a_Color")
-                });
+                new BufferElement(ShaderDataType.Float3, "a_Position"),
+                new BufferElement(ShaderDataType.Float4, "a_Color"));
 
-        BufferLayout blueLayout = new BufferLayout(
-                new BufferElement[] {
-                        new BufferElement(ShaderDataType.Float3, "a_Position")
-                });
+        BufferLayout blueLayout = new BufferLayout(new BufferElement(ShaderDataType.Float3, "a_Position"));
 
         squareVB.getReference().setLayout(blueLayout);
         squareVA.getReference().addVertexBuffer(squareVB);
@@ -194,7 +168,9 @@ public abstract class Application {
 
         ClientLog.trace("Application initialized.");
 
-        WindowsInput.init();
+        if (System.getProperty("os.name").startsWith("Windows")) {
+            WindowsInput.init();
+        }
 
         if (!System.getProperty("os.name").startsWith("Windows") || !System.getProperty("os.arch").contains("64")) {
             ClientLog.error("Ignite Engine only supports Windows x64");
@@ -204,6 +180,11 @@ public abstract class Application {
         if (DEBUG) {
             System.setProperty("DEBUG", "true");
         }
+
+        DebugConsole.sendMessage("Application successful initialized!");
+        DebugConsole.sendMessage("Window successful initialized!");
+        DebugConsole.sendMessage("Welcome to Ignite Engine 1.0.1");
+        DebugConsole.sendMessage("Rendering API: " + RendererAPI.getAPI().name());
 
         // Logger.setLineSeparator(true);
     }
@@ -222,6 +203,7 @@ public abstract class Application {
 
         for (Layer layer : this.layerStack) {
 
+
             layer.onEvent(e);
             if (e.isHandled()) {
                 break;
@@ -239,42 +221,47 @@ public abstract class Application {
         this.start();
         pushOverlay(imGuiLayer);
 
+        int frameCount = 0;
+
         while (Application.RUNNING) {
             this.update();
-            glClearColor(0.1f, 0.1f, 0.1f, 1f);
-            glClear(GL_COLOR_BUFFER_BIT);
+            Time.update();
 
-            this.blueShader.bind();
-            this.squareVA.getReference().bind();
-            glDrawElements(GL_TRIANGLES, this.squareVA.getReference().getIndexBuffer().getReference().getCount(),
-                    GL_UNSIGNED_INT, 0);
-            this.blueShader.unbind();
-
-            this.shader.bind();
-            this.vertexArray.getReference().bind();
-            glDrawElements(GL_TRIANGLES, this.vertexArray.getReference().getIndexBuffer().getReference().getCount(),
-                    GL_UNSIGNED_INT, 0);
-            this.shader.unbind();
+            RenderCommand.setClearColor(new Vector4(0f, 0f, 0f, 1f));
+            RenderCommand.clear();
+            Renderer.beginScene();
+            shader.bind();
+            Renderer.submit(vertexArray);
+            shader.unbind();
+            Renderer.endScene();
 
             for (Layer layer : this.layerStack) {
                 layer.onUpdate();
             }
 
-            this.imGuiLayer.begin();
+            imGuiLayer.begin();
 
             for (Layer layer : this.layerStack) {
-
                 layer.onImGuiRender();
             }
 
-            this.imGuiLayer.end();
+            imGuiLayer.end();
 
             this.window.onUpdate();
+
+            float frameTime = Time.deltaTime();
+            FPS += frameTime;
+
+            if (FPS >= 1.0f) {
+                FPS = 0.0f;
+                DebugConsole.sendMessage("FPS    " + String.format("%.2f", 1f / Time.deltaTime()).replaceAll(",", "."));
+            }
         }
     }
 
+
     /**
-     * Abstract method to be implemented by the concrete subclass.
+     * Method to be implemented by the concrete subclass.
      * It is called at the beginning of the application's execution and can be used
      * to perform initial setup.
      */
@@ -283,12 +270,11 @@ public abstract class Application {
     }
 
     /**
-     * Abstract method to be implemented by the concrete subclass.
+     * Method to be implemented by the concrete subclass.
      * It is called repeatedly in the main loop and can be used to update the
      * application's state.
      */
     public void update() {
-
     }
 
     /**
@@ -347,282 +333,14 @@ public abstract class Application {
     /**
      * Sets the instance of the application (singleton).
      *
-     * @param app The application instance to set.
+     * @param instance The application instance to set.
      */
-    public static void setInstance(Application app) {
-        Application.app = app;
-    }
-
-    /**
-     * Adds a new trigger event with the given name and associated caller.
-     *
-     * @param caller    The caller that will handle the trigger event.
-     * @param eventName The name of the trigger event.
-     * @throws DuplicatedTriggerEventException if a trigger event with the same name
-     *                                         already exists.
-     */
-    protected void addTriggerEvent(GenericFunction caller, String eventName) throws DuplicatedTriggerEventException {
-
-        TriggerEvent triggerEvent = new TriggerEvent(caller, eventName);
-
-        if (!this.triggerEvents.containsKey(eventName)) {
-
-            this.triggerEvents.put(eventName, triggerEvent);
-            this.triggerEventNames.add(eventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new DuplicatedTriggerEventException(
-                    "The trigger with name: \"" + triggerEvent.getDescriptor().getEventName() + "\" already exists");
-        }
-    }
-
-    /**
-     * Adds a new trigger event with the given name, associated caller, and
-     * additional event attributes.
-     *
-     * @param caller          The caller that will handle the trigger event.
-     * @param eventName       The name of the trigger event.
-     * @param eventAttributes Additional attributes associated with the trigger
-     *                        event.
-     * @throws DuplicatedTriggerEventException if a trigger event with the same name
-     *                                         already exists.
-     */
-    protected void addTriggerEvent(GenericFunction caller, String eventName, Object... eventAttributes)
-            throws DuplicatedTriggerEventException {
-
-        TriggerEvent triggerEvent = new TriggerEvent(caller, new EventDescriptor(eventName, eventAttributes));
-
-        if (!this.triggerEvents.containsKey(eventName)) {
-
-            this.triggerEvents.put(eventName, triggerEvent);
-            this.triggerEventNames.add(eventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new DuplicatedTriggerEventException(
-                    "The trigger with name: \"" + triggerEvent.getDescriptor().getEventName() + "\" already exists");
-        }
-    }
-
-    /**
-     * Retrieves a trigger event by its name.
-     *
-     * @param triggerEventName The name of the trigger event to retrieve.
-     * @return The trigger event associated with the given name.
-     * @throws InexistentTriggerEventException if the trigger event with the given
-     *                                         name
-     *                                         does not exist.
-     */
-    @Nullable
-    private TriggerEvent getTriggerEvent(String triggerEventName) throws InexistentTriggerEventException {
-
-        if (this.triggerEvents.containsKey(triggerEventName)) {
-
-            return this.triggerEvents.get(triggerEventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new InexistentTriggerEventException(
-                    "The required trigger with name: \"" + triggerEventName + "\" does not exist.");
-
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Removes a trigger event by its name.
-     *
-     * @param triggerEventName The name of the trigger event to remove.
-     * @throws InexistentTriggerEventException if the trigger event with the given
-     *                                         name
-     *                                         does not exist or has already been
-     *                                         removed.
-     */
-    protected void removeTriggerEvent(String triggerEventName) throws InexistentTriggerEventException {
-
-        if (this.triggerEventNames.contains(triggerEventName)) {
-
-            this.triggerEvents.remove(triggerEventName);
-            this.triggerEventNames.remove(triggerEventName);
-
-        } else {
-            throw new InexistentTriggerEventException("The required trigger with name: \"" + triggerEventName
-                    + "\" does not exist or has already been removed.");
-        }
-    }
-
-    /**
-     * Calls a trigger event with the given name and condition.
-     *
-     * @param triggerEventName The name of the trigger event to call.
-     * @param condition        The condition that determines whether the trigger
-     *                         should be executed.
-     */
-    protected void callTriggerEvent(String triggerEventName, boolean condition) {
-
-        TriggerEvent event;
-
+    public static <T extends Application> void setInstance(Class<T> instance) {
         try {
-            if ((event = this.getTriggerEvent(triggerEventName)) == null) {
-
-                throw new InexistentTriggerEventException("The required trigger with name: \"" + triggerEventName
-                        + "\" does not exist or has already been removed.");
-            }
-
-        } catch (InexistentTriggerEventException e) {
-
-            if (this.throwEventExceptions) {
-                throw e;
-            }
-
-            return;
+            Application.app = instance.getDeclaredConstructor().newInstance();
+        } catch (InstantiationException | IllegalAccessException | InvocationTargetException
+                 | NoSuchMethodException e) {
+            ClientLog.error("The class \"" + instance.getSimpleName() + "\" not extends of Application");
         }
-
-        Trigger trigger = event.getTrigger();
-        trigger.call(condition, event.getMethod());
-    }
-
-    /**
-     * Adds a new tick event with the given name and associated caller.
-     *
-     * @param caller    The caller that will handle the tick event.
-     * @param eventName The name of the tick event.
-     * @throws DuplicatedTickEventException if a tick event with the same name
-     *                                      already exists.
-     */
-
-    protected void addTickEvent(GenericFunction caller, String eventName) throws DuplicatedTickEventException {
-        TickEvent tickEvent = new TickEvent(caller, eventName);
-
-        if (!this.tickEvents.containsKey(eventName)) {
-
-            this.tickEvents.put(eventName, tickEvent);
-            this.tickEventNames.add(eventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new DuplicatedTickEventException(
-                    "The tick with name: \"" + tickEvent.getDescriptor().getEventName() + "\" already exists");
-        }
-    }
-
-    /**
-     * Adds a new tick event with the given name, associated caller, and additional
-     * event attributes.
-     *
-     * @param caller          The caller that will handle the tick event.
-     * @param eventName       The name of the tick event.
-     * @param eventAttributes Additional attributes associated with the tick event.
-     * @throws DuplicatedTickEventException if a tick event with the same name
-     *                                      already exists.
-     */
-
-    protected void addTickEvent(GenericFunction caller, String eventName, Object... eventAttributes)
-            throws DuplicatedTickEventException {
-
-        TickEvent tickEvent = new TickEvent(caller, new EventDescriptor(eventName, eventAttributes));
-
-        if (!this.tickEvents.containsKey(eventName)) {
-
-            this.tickEvents.put(eventName, tickEvent);
-            this.tickEventNames.add(eventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new DuplicatedTickEventException(
-                    "The tick with name: \"" + tickEvent.getDescriptor().getEventName() + "\" already exists");
-        }
-    }
-
-    /**
-     * Retrieves a tick event by its name.
-     *
-     * @param tickEventName The name of the tick event to retrieve.
-     * @return The tick event associated with the given name.
-     * @throws InexistentTickEventException if the tick event with the given name
-     *                                      does not exist.
-     */
-
-    @Nullable
-    private TickEvent getTickEvent(String tickEventName) throws InexistentTickEventException {
-
-        if (this.tickEvents.containsKey(tickEventName)) {
-
-            return this.tickEvents.get(tickEventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new InexistentTickEventException(
-                    "The required tick with name: \"" + tickEventName + "\" does not exist.");
-
-        } else {
-            return null;
-        }
-    }
-
-    /**
-     * Removes a tick event by its name.
-     *
-     * @param tickEventName The name of the tick event to remove.
-     * @throws InexistentTickEventException if the tick event with the given name
-     *                                      does not exist or has already been
-     *                                      removed.
-     */
-
-    protected void removeTickEvent(String tickEventName) throws InexistentTickEventException {
-
-        if (this.tickEventNames.contains(tickEventName)) {
-
-            this.tickEvents.remove(tickEventName);
-            this.tickEventNames.remove(tickEventName);
-
-        } else if (this.throwEventExceptions) {
-
-            throw new InexistentTickEventException("The required tick with name: \"" + tickEventName
-                    + "\" does not exist or has already been removed.");
-        }
-    }
-
-    /**
-     * Calls a tick event by its name and condition.
-     *
-     * @param tickEventName The name of the tick event to call.
-     * @param condition     The condition that determines whether the tick event
-     *                      should be executed.
-     */
-
-    protected void callTickEvent(String tickEventName, boolean condition) {
-
-        TickEvent event;
-
-        try {
-            if ((event = this.getTickEvent(tickEventName)) == null) {
-
-                throw new InexistentTriggerEventException(
-                        "The required tick with name: \"" + tickEventName + "\" does not exist.");
-            }
-
-        } catch (InexistentTriggerEventException e) {
-
-            if (this.throwEventExceptions) {
-
-                throw e;
-            }
-
-            return;
-        }
-
-        Tick tick = event.getTick();
-        tick.call(condition, event.getMethod());
-    }
-
-    protected void disableEventExceptions() {
-        throwEventExceptions = false;
-    }
-
-    protected void enableEventExceptions() {
-        throwEventExceptions = true;
     }
 }

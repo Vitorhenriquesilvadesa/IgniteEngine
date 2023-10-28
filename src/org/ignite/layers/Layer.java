@@ -27,7 +27,7 @@
 package org.ignite.layers;
 
 import org.ignite.events.Event;
-import org.ignite.system.meta.Define;
+import org.ignite.annotations.Define;
 
 /**
  * The `Layer` class represents a layer in the Ignite Engine's layer stack.
@@ -37,7 +37,7 @@ import org.ignite.system.meta.Define;
 @Define("IGNITE_API")
 public abstract class Layer {
 
-    private String debugName;
+    private final String debugName;
 
     /**
      * Constructs a new `Layer` with the given debug name.
