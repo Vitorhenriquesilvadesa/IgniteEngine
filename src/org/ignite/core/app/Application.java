@@ -31,6 +31,8 @@ import org.ignite.events.*;
 import org.ignite.layers.Layer;
 import org.ignite.layers.LayerStack;
 import org.ignite.layers.imgui.ImGuiLayer;
+import org.ignite.layers.ui.FontFamily;
+import org.ignite.layers.ui.UIManager;
 import org.ignite.mathf.Vector4;
 import org.ignite.platform.general.Window;
 import org.ignite.platform.general.WindowProps;
@@ -41,7 +43,10 @@ import org.ignite.renderertools.renderer.RenderCommand;
 import org.ignite.renderertools.renderer.Renderer;
 import org.ignite.renderertools.renderer.RendererAPI;
 import org.ignite.renderertools.shader.Shader;
+import org.ignite.system.debbuging.DebugColor;
 import org.ignite.system.debbuging.DebugConsole;
+import org.ignite.system.debbuging.DebugLevel;
+import org.ignite.system.debbuging.DebugMessage;
 import org.ignite.system.log.LogLevel;
 import org.ignite.system.log.Logger;
 import org.ignite.annotations.Define;
@@ -87,6 +92,7 @@ public abstract class Application extends EventManager {
     private SharedPointer<VertexArray> vertexArray = new SharedPointer<VertexArray>();
     private SharedPointer<VertexArray> squareVA = new SharedPointer<VertexArray>();
 
+    public float lastFPSValue = 0f;
     private Shader shader;
     private Shader blueShader;
 
@@ -181,10 +187,10 @@ public abstract class Application extends EventManager {
             System.setProperty("DEBUG", "true");
         }
 
-        DebugConsole.sendMessage("Application successful initialized!");
-        DebugConsole.sendMessage("Window successful initialized!");
-        DebugConsole.sendMessage("Welcome to Ignite Engine 1.0.1");
-        DebugConsole.sendMessage("Rendering API: " + RendererAPI.getAPI().name());
+        DebugConsole.sendMessage(new DebugMessage("Application successful initialized!", DebugColor.BLUE, DebugLevel.INFO, "Application"));
+        DebugConsole.sendMessage(new DebugMessage("Window successful initialized!", DebugColor.BLUE, DebugLevel.INFO, "Application"));
+        DebugConsole.sendMessage(new DebugMessage("Welcome to Ignite Engine 1.0.1", DebugColor.BLUE, DebugLevel.INFO, "Application"));
+        DebugConsole.sendMessage(new DebugMessage("Rendering API: " + RendererAPI.getAPI(), DebugColor.BLUE, DebugLevel.INFO, "Application"));
 
         // Logger.setLineSeparator(true);
     }
@@ -203,7 +209,6 @@ public abstract class Application extends EventManager {
 
         for (Layer layer : this.layerStack) {
 
-
             layer.onEvent(e);
             if (e.isHandled()) {
                 break;
@@ -218,6 +223,7 @@ public abstract class Application extends EventManager {
      */
 
     public void run() {
+
         this.start();
         pushOverlay(imGuiLayer);
 
@@ -229,11 +235,11 @@ public abstract class Application extends EventManager {
 
             RenderCommand.setClearColor(new Vector4(0f, 0f, 0f, 1f));
             RenderCommand.clear();
-            Renderer.beginScene();
-            shader.bind();
-            Renderer.submit(vertexArray);
-            shader.unbind();
-            Renderer.endScene();
+//            Renderer.beginScene();
+//            shader.bind();
+//            Renderer.submit(vertexArray);
+//            shader.unbind();
+//            Renderer.endScene();
 
             for (Layer layer : this.layerStack) {
                 layer.onUpdate();
@@ -253,8 +259,8 @@ public abstract class Application extends EventManager {
             FPS += frameTime;
 
             if (FPS >= 1.0f) {
+                lastFPSValue = 1 / Time.deltaTime();
                 FPS = 0.0f;
-                DebugConsole.sendMessage("FPS    " + String.format("%.2f", 1f / Time.deltaTime()).replaceAll(",", "."));
             }
         }
     }

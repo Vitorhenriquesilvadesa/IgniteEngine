@@ -12,9 +12,7 @@ package org.ignite.layers.imgui;
 import static org.ignite.core.app.Application.ClientLog;
 
 import imgui.*;
-import imgui.extension.imnodes.ImNodes;
 import org.ignite.core.app.Application;
-import org.ignite.core.app.Time;
 import org.ignite.events.*;
 import org.ignite.layers.Layer;
 
@@ -22,7 +20,12 @@ import imgui.flag.*;
 import imgui.gl3.ImGuiImplGl3;
 import imgui.glfw.ImGuiImplGlfw;
 import org.ignite.annotations.Define;
+import org.ignite.layers.ui.*;
 import org.ignite.system.debbuging.DebugConsole;
+import org.ignite.system.debbuging.DebugMessage;
+
+import java.util.ArrayList;
+import java.util.List;
 
 import static org.ignite.core.macros.debug.Macros.workingDir;
 import static org.lwjgl.opengl.GL11.*;
@@ -40,15 +43,10 @@ public class ImGuiLayer extends Layer {
 
     private ImGuiImplGl3 implOpenGL = new ImGuiImplGl3();
     private ImGuiImplGlfw implGLFW = new ImGuiImplGlfw();
-    public ImGuiElement leftMenuBackground = new ImGuiLeftMenuBackground();
-    public ImGuiElement fileDialog = new ImGuiFileDialog();
-    public ImGuiElement fpsDisplay;
-    public ImGuiElement screenDisplay = new ImGuiScreenDisplay(300, 0);
-    public ImGuiTopMenu topMenu = new ImGuiTopMenu();
-    public ImGuiFileExplorer fileExplorer;
-
-    public ImGuiRightMenu rightMenu;
+    public UIFunctionManager functionManager;
+    public List<Widget> consoleMessages = new ArrayList<>();
     public static ImGuiTheme theme = ImGuiTheme.getTheme(ImGuiThemes.OneDark);
+    FullScreenContainer parentWidget;
 
     public ImGuiLayer() {
         super("ImGuiLayer");
@@ -65,10 +63,8 @@ public class ImGuiLayer extends Layer {
         io.addConfigFlags(ImGuiConfigFlags.NavEnableKeyboard);
         io.addConfigFlags(ImGuiConfigFlags.DockingEnable);
 
-        String fontPath = workingDir + "res/fonts/Ubuntu-Regular.ttf";
-        float fontSize = 20.0f;
-        ImFont font = io.getFonts().addFontFromFileTTF(fontPath, fontSize);
-        io.setFontDefault(font);
+        UIManager.init();
+        this.functionManager = new UIFunctionManager();
 
         io.addBackendFlags(ImGuiBackendFlags.HasMouseCursors | ImGuiBackendFlags.HasSetMousePos);
         io.setBackendPlatformName("imgui_java_impl_glfw");
@@ -84,9 +80,62 @@ public class ImGuiLayer extends Layer {
         implGLFW.init(window, true);
         implOpenGL.init("#version 410");
 
-        this.fpsDisplay = new ImGuiFPSDisplay(0, Application.getInstance().getWindow().getHeight() - 40);
-        this.fileExplorer = new ImGuiFileExplorer();
-        this.rightMenu = new ImGuiRightMenu();
+        this.parentWidget = new FullScreenContainer(
+
+                new StackContainer(0, 32, 300, 1080 - 96,
+                        new Container(0, 1080 - 64, 300, 48, new Text("FPS: "+Application.getInstance().lastFPSValue)))
+                        .decoration(new BoxDecoration().color(Colors.fromRGBA(30, 30, 30, 255))
+                                .borderColor(Colors.fromRGBA(50, 50, 50, 255)).borderWidth(2)),
+                new StackContainer(
+                        300,
+                        1080 - 400,
+                        1920 - 600,
+                        400).children(new TabContainer(300, 1020 - 400, 1920 - 600, 400, "Project",
+                                new Tab(300,
+                                        1020 - 400,
+                                        1920 - 600,
+                                        400, "Debug Console", this.consoleMessages),
+                                new Tab(300,
+                                        1020 - 400,
+                                        1920 - 600,
+                                        400, "Project Explorer")
+                        ).decoration(new BoxDecoration().color(Colors.fromRGBA(30, 30, 30, 255))
+                                .borderColor(Colors.fromRGBA(50, 50, 50, 255)).borderWidth(2).activeColor(Colors.fromRGBA(119, 152, 255, 255)
+                                ).hoverColor(Colors.fromRGBA(119, 152, 255, 255))
+                        )
+                ).decoration(new BoxDecoration().color(Colors.fromRGBA(30, 30, 30, 255))
+                        .borderColor(Colors.fromRGBA(50, 50, 50, 255)).borderWidth(2).activeColor(Colors.fromRGBA(203, 122, 119, 255))),
+
+                new VerticalExpanded(1920 - 300, 96, 300
+                ).decoration(new BoxDecoration().color(Colors.fromRGBA(30, 30, 30, 255))
+                        .borderColor(Colors.fromRGBA(50, 50, 50, 255)).borderWidth(2)),
+
+                new NoDockingStackContainer(0, 0, 1920, 32,
+                        new CascadeMenu(28, 0, 80, 32, 80, "New",
+                                new CascadeMenuItem("Project").onPressed(functionManager::File_NewProject),
+                                new CascadeMenuItem("File").onPressed(functionManager::File_NewFile)
+                        ).decoration(new BoxDecoration().borderColor(Colors.fromRGBA(30, 30, 30, 255))
+                                .color(Colors.fromRGBA(50, 50, 50, 255))),
+                        new CascadeMenu(128, 0, 80, 32, 160, "Open",
+                                new CascadeMenuItem("Project").onPressed(functionManager::File_Open),
+                                new CascadeMenuItem("Recent Project").onPressed(functionManager::File_OpenRecent),
+                                new CascadeMenuItem("File")
+                        ).decoration(new BoxDecoration().borderColor(Colors.fromRGBA(30, 30, 30, 255))
+                                .color(Colors.fromRGBA(50, 50, 50, 255)))
+                ).decoration(new BoxDecoration().borderColor(Colors.fromRGBA(30, 30, 30, 255))
+                        .color(Colors.fromRGBA(50, 50, 50, 255))),
+                new NoDockingStackContainer(0, 32, 1920, 64,
+                        new Image(-8, -4, 24, 24, workingDir + "res/icons/ignite.png")
+                ).decoration(new BoxDecoration().color(Colors.fromRGBA(40, 40, 40, 255)))
+
+        ).decoration(new BoxDecoration(
+                new Color(0, 0, 0, 0),
+                new Color(30, 30, 30, 255),
+                new Color(0, 0, 0, 0),
+                0, 0, null));
+
+        Screen screen = new Screen(parentWidget);
+        Navigator.pushScreen(screen);
     }
 
     @Override
@@ -125,33 +174,19 @@ public class ImGuiLayer extends Layer {
     }
 
     public void onImGuiRender() {
-        ImGui.getIO().setConfigFlags(ImGui.getIO().getConfigFlags() | ImGuiConfigFlags.DockingEnable);
 
+        ImGui.getIO().setConfigFlags(ImGui.getIO().getConfigFlags() | ImGuiConfigFlags.DockingEnable);
         theme.applyTheme();
 
-        Application app = Application.getInstance();
-        ImGuiStyle style = ImGui.getStyle();
-
-        leftMenuBackground.renderElement();
-        fileDialog.renderElement();
-        fpsDisplay.renderElement();
-        screenDisplay.renderElement();
-        topMenu.renderElement();
-        fileExplorer.renderElement();
-        rightMenu.renderElement();
-
-        ImGui.setNextWindowSize(app.getWindow().getWidth() - 600, app.getWindow().getHeight(), ImGuiCond.Once);
-
-        if(ImGui.begin("Debugging Console", ImGuiWindowFlags.NoCollapse)){
-
-            for(String s : DebugConsole.getDebugMessages()){
-                ImGui.text(s);
+        if (this.consoleMessages.size() < DebugConsole.getDebugMessages().size()) {
+            for (int i = this.consoleMessages.size(); i < DebugConsole.getDebugMessages().size(); i++) {
+                DebugMessage message = DebugConsole.getDebugMessages().get(i);
+                this.consoleMessages.add(new Text(message.getText()).style(new TextStyle("JetBrainsMono-VariableFont_wght", FontSize.MEDIUM, message.getColor())));
             }
-
-            ImGui.end();
         }
-    }
 
+        Navigator.render();
+    }
 
 
     private void syncDisplay() {

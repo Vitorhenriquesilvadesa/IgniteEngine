@@ -38,13 +38,32 @@ public class ImGuiFileDialog extends ImGuiElement {
                     }
                     ImGui.endMenu();
                 }
-                if (ImGui.beginMenu("Theme")) {
-                    if (ImGui.menuItem("One Dark")) {
-                        ImGuiLayer.theme = ImGuiTheme.getTheme(ImGuiThemes.OneDark);
+                if (ImGui.beginMenu("Edit")) {
+                    if(ImGui.beginMenu("Project Settings")){
+
+                        if (ImGui.menuItem("General")) {
+
+                        }
+
+                        if (ImGui.menuItem("Rendering")) {
+
+                        }
+
+                        ImGui.endMenu();
                     }
-                    if (ImGui.menuItem("Dracula")) {
-                        ImGuiLayer.theme = ImGuiTheme.getTheme(ImGuiThemes.Dracula);
+
+                    if(ImGui.beginMenu("Theme")){
+
+                        if (ImGui.menuItem("One Dark")) {
+                            ImGuiLayer.theme = ImGuiTheme.getTheme(ImGuiThemes.OneDark);
+                        }
+                        if (ImGui.menuItem("Dracula")) {
+                            ImGuiLayer.theme = ImGuiTheme.getTheme(ImGuiThemes.Dracula);
+                        }
+
+                        ImGui.endMenu();
                     }
+
                     ImGui.endMenu();
                 }
             }

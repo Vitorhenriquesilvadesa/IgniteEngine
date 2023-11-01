@@ -159,6 +159,16 @@ public class WindowsWindow implements Window {
         createCapabilities();
         setVSync(true);
 
+        glfwMaximizeWindow(window);
+
+        int[] widthA = new int[1];
+        int[] heightA = new int[1];
+        glfwGetFramebufferSize(window, widthA, heightA);
+
+        this.data = new WindowData(title, widthA[0], heightA[0]);
+        windowDataMap.replace(window, new WindowData(title, widthA[0], heightA[0]));
+        glfwSetWindowAttrib(window, GLFW_RESIZABLE, GLFW_FALSE);
+
         /**
          * Set of GLFW Callbacks, like WindowResize, WindowClose, Keyboard, Keys and
          * Mouse functions

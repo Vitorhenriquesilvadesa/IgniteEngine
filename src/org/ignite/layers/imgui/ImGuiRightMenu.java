@@ -23,11 +23,12 @@ public class ImGuiRightMenu extends ImGuiElement {
         renderFlag = true;
 
 
-        if (ImGui.begin("Right Menu", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar)) {
+        if (ImGui.begin("Right Menu", ImGuiWindowFlags.NoMove | ImGuiWindowFlags.NoTitleBar
+                | ImGuiWindowFlags.NoResize)) {
 
-            ImGui.setWindowSize(ImGui.getWindowSizeX(), app.getWindow().getHeight());
-            ImGui.setWindowPos(app.getWindow().getWidth() - ImGui.getWindowSizeX(), 0);
-            ImGui.end();
+            ImGui.setWindowSize(300, app.getWindow().getHeight());
+            ImGui.setWindowPos(app.getWindow().getWidth() - 300, 0);
         }
+        ImGui.end();
     }
 }
