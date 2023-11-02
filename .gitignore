@@ -1,9 +1,9 @@
-bin/
-.vscode/
-vendor/
-src/test/
+bin
+.vscode
+vendor
+src/test
 *.log
 *.gitignore
-out/
-LWJGL/
-JImGui/
+out
+LWJGL
+JImGui
