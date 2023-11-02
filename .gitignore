@@ -1,9 +1,0 @@
-bin
-.vscode
-vendor
-src/test
-*.log
-*.gitignore
-out/
-LWJGL/
-JImGui/
