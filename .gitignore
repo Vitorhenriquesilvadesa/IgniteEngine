@@ -4,6 +4,6 @@ vendor
 src/test
 *.log
 *.gitignore
-out
-LWJGL
-JImGui
+out/
+LWJGL/
+JImGui/
