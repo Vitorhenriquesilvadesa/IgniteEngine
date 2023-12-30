@@ -1,0 +1,97 @@
+<component name="ArtifactManager">
+  <artifact type="jar" name="Engine:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Engine_jar</output-path>
+    <root id="archive" name="Engine.jar">
+      <element id="module-output" name="Engine" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/JImGui/src/imgui-app-1.86.10-all.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/JImGui/src/imgui-app-1.86.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/JImGui/src/imgui-binding-1.86.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/JImGui/src/imgui-lwjgl3-1.86.10.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-assimp-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-assimp.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-bgfx-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-bgfx.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-cuda.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-egl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-fmod.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-freetype-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-freetype.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-glfw-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-glfw.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-harfbuzz-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-harfbuzz.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-hwloc-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-hwloc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-jawt.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-jemalloc-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-jemalloc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-ktx-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-ktx.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-libdivide-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-libdivide.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-llvm-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-llvm.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-lmdb-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-lmdb.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-lz4-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-lz4.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-meow-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-meow.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-meshoptimizer-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-meshoptimizer.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-nanovg-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-nanovg.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-nfd-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-nfd.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-nuklear-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-nuklear.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-odbc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-openal-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-openal.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opencl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opengl-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opengl.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opengles-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opengles.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-openvr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-openvr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-openxr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-openxr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opus-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-opus.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-ovr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-ovr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-par-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-par.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-remotery-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-remotery.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-rpmalloc-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-rpmalloc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-shaderc-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-shaderc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-spvc-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-spvc.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-sse-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-sse.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-stb-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-stb.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-tinyexr-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-tinyexr.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-tinyfd-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-tinyfd.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-tootle-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-tootle.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-vma-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-vma.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-vulkan.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-xxhash-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-xxhash.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-yoga-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-yoga.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-zstd-natives-windows.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl-zstd.jar" path-in-jar="/" />
+      <element id="extracted-dir" path="$PROJECT_DIR$/LWJGL/src/lwjgl.jar" path-in-jar="/" />
+    </root>
+  </artifact>
+</component>

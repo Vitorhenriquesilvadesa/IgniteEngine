@@ -1,0 +1,13 @@
+workspace "Eros"{
+
+    architeture "x64"
+
+    configurations
+    {
+        "Debug",
+        "Release",
+        "Dist"
+    }
+
+    outputdir = "@SolutionDir"
+}
